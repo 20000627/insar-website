@@ -1,0 +1,4 @@
+# GitHub Pages 部署配置 - 禁止 Jekyll 处理
+# 纯静态站点，无需 Jekyll 构建
+title: 地微科技
+description: InSAR 形变监测解决方案
