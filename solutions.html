@@ -24,7 +24,7 @@
 
 <div class="page-header">
   <h1>解决方案</h1>
-  <p>面向五大垂直场景的 InSAR 形变监测全链路服务</p>
+  <p>以哨兵一号（Sentinel-1）为核心，配以光学卫星，覆盖五大垂直场景</p>
 </div>
 
 <section class="section">
@@ -37,17 +37,17 @@
       </div>
       <div>
         <h2 style="color:var(--primary);margin-bottom:.8rem;">地质灾害监测</h2>
-        <p>利用时序 InSAR 技术识别滑坡隐患点，监测地表形变趋势。可处理植被覆盖区和陡峭地形区域。</p>
+        <p>利用时序 InSAR 技术（PS-InSAR / SBAS / DS-InSAR）识别滑坡隐患点，监测地表形变趋势。以 Sentinel-1 时序数据为主，配合光学卫星影像进行综合解译。</p>
         <ul style="margin-top:1rem;padding-left:1.2rem;color:var(--gray);font-size:.92rem;">
-          <li>区域性滑坡隐患排查（年覆盖 >5000 km²）</li>
-          <li>单体滑坡高频次定点监测（重访周期 6-12 天）</li>
+          <li>区域性滑坡隐患排查（年覆盖 >1000 km²）</li>
+          <li>单体滑坡高频次监测（重访 6-12 天）</li>
           <li>形变速率提取 + 异常阈值预警</li>
-          <li>支持 PS-InSAR / SBAS / DS-InSAR 多方法</li>
+          <li>配合光学影像进行形态解译</li>
         </ul>
         <div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
           <span class="card-tag blue">Sentinel-1</span>
-          <span class="card-tag blue">国产 SAR</span>
-          <span class="card-tag amber">形变速率：mm/yr</span>
+          <span class="card-tag amber">亚毫米精度</span>
+          <span class="card-tag green">DInSAR + 时序</span>
         </div>
         <a href="cases.html" class="btn btn-primary" style="margin-top:1.5rem;">查看相关案例 →</a>
       </div>
@@ -56,66 +56,44 @@
     <!-- 2 -->
     <div class="solution-detail reverse" id="infrastructure">
       <div class="solution-visual" style="background:linear-gradient(135deg,#0a3d6b,#00a8cc);">
-        <div><strong>基础设施安全监测</strong><br><span style="font-size:.9rem;opacity:.8;">地铁 · 高铁 · 桥梁 · 管线</span></div>
+        <div><strong>基础设施安全监测</strong><br><span style="font-size:.9rem;opacity:.8;">地铁 · 大坝 · 矿区</span></div>
       </div>
       <div>
         <h2 style="color:var(--primary);margin-bottom:.8rem;">基础设施安全监测</h2>
-        <p>针对线性工程与重大基础设施的形变风险筛查，基于高分辨率 SAR 影像实现厘米级精度的风险识别。</p>
+        <p>针对地铁、大坝、矿区等重大工程，利用高分辨率 SAR 数据实现亚毫米级形变监测，识别安全隐患。</p>
         <ul style="margin-top:1rem;padding-left:1.2rem;color:var(--gray);font-size:.92rem;">
-          <li>地铁沿线保护区分区形变监测</li>
-          <li>高铁线路年度风险筛查（时速 300km/h+ 线路）</li>
-          <li>大型桥梁/隧道结构形变时间序列分析</li>
-          <li>油气管线地质沉降风险评估</li>
+          <li>地铁线路沿线保护区形变筛查</li>
+          <li>大坝及库区岸坡稳定性评估</li>
+          <li>矿区采空区沉降长期监测</li>
+          <li>历史形变追溯（5-10 年存档数据）</li>
         </ul>
         <div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
-          <span class="card-tag blue">高分辨率 SAR</span>
-          <span class="card-tag green">COSMO-SkyMed</span>
+          <span class="card-tag blue">Sentinel-1 堆栈</span>
           <span class="card-tag amber">监测频率：月/季度</span>
+          <span class="card-tag green">亚 mm/yr 精度</span>
         </div>
         <a href="cases.html" class="btn btn-primary" style="margin-top:1.5rem;">查看相关案例 →</a>
       </div>
     </div>
 
     <!-- 3 -->
-    <div class="solution-detail" id="mining">
-      <div class="solution-visual" style="background:linear-gradient(135deg,#10b981,#059669);">
-        <div><strong>矿区形变监测</strong><br><span style="font-size:.9rem;opacity:.8;">露天矿 · 采空区</span></div>
+    <div class="solution-detail" id="earthquake">
+      <div class="solution-visual" style="background:linear-gradient(135deg,#dc2626,#991b1b);">
+        <div><strong>地震 InSAR 监测</strong><br><span style="font-size:.9rem;opacity:.8;">同震形变 · 震后监测</span></div>
       </div>
       <div>
-        <h2 style="color:var(--primary);margin-bottom:.8rem;">矿区形变监测</h2>
-        <p>覆盖露天矿边坡稳定性和地下采空区地表沉降的长期监测，满足矿山安全监管与环保合规要求。</p>
+        <h2 style="color:var(--primary);margin-bottom:.8rem;">地震 InSAR 监测</h2>
+        <p>利用 DInSAR 和时序 InSAR 技术，提取地震同震形变场和分析震后长期形变演化规律。</p>
         <ul style="margin-top:1rem;padding-left:1.2rem;color:var(--gray);font-size:.92rem;">
-          <li>矿区地表沉降速率图年度更新</li>
-          <li>采空区活化识别与边界划定</li>
-          <li>露天矿边坡形变趋势分析</li>
-          <li>历史形变追溯（10 年+ 存档数据）</li>
+          <li>地震前后 DInSAR 差分干涉测量</li>
+          <li>同震形变场快速提取（应急响应）</li>
+          <li>断层蠕变与震后形变时序分析</li>
+          <li>区域地震风险评估支撑</li>
         </ul>
         <div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
-          <span class="card-tag blue">Sentinel-1 堆栈</span>
-          <span class="card-tag amber">监测范围 >100 km²</span>
-          <span class="card-tag green">精度：<5 mm/yr</span>
-        </div>
-        <a href="cases.html" class="btn btn-primary" style="margin-top:1.5rem;">查看相关案例 →</a>
-      </div>
-    </div>
-
-    <!-- 4 -->
-    <div class="solution-detail reverse" id="urban">
-      <div class="solution-visual" style="background:linear-gradient(135deg,#f59e0b,#d97706);">
-        <div><strong>城市地面沉降</strong><br><span style="font-size:.9rem;opacity:.8;">区域性沉降 · 重点区域</span></div>
-      </div>
-      <div>
-        <h2 style="color:var(--primary);margin-bottom:.8rem;">城市地面沉降监测</h2>
-        <p>城市级大范围沉降速率制图与重点区域精细化监测，支持海绵城市、地灾防治规划。</p>
-        <ul style="margin-top:1rem;padding-left:1.2rem;color:var(--gray);font-size:.92rem;">
-          <li>全城年度沉降速率图（分辨率 30-90 m）</li>
-          <li>典型沉降漏斗演化分析</li>
-          <li>轨道交通走廊形变专项评估</li>
-          <li>地下工程（深基坑/隧道）建设影响监测</li>
-        </ul>
-        <div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
-          <span class="card-tag blue">时序 InSAR</span>
-          <span class="card-tag amber">覆盖面积 >500 km²</span>
+          <span class="card-tag blue">Sentinel-1</span>
+          <span class="card-tag amber">DInSAR</span>
+          <span class="card-tag green">快速响应</span>
         </div>
         <a href="cases.html" class="btn btn-primary" style="margin-top:1.5rem;">查看相关案例 →</a>
       </div>
@@ -127,11 +105,11 @@
 <footer class="footer">
   <div class="footer-grid">
     <div><h4>地微科技</h4><p style="font-size:.85rem;line-height:1.6;">专注 InSAR 形变监测技术，为工程安全与地质灾害防治提供高精度空间信息支撑。</p></div>
-    <div><h4>服务</h4><a href="solutions.html">地质灾害监测</a><a href="solutions.html">基础设施安全</a><a href="solutions.html">矿区形变监测</a><a href="solutions.html">城市沉降监测</a></div>
-    <div><h4>案例</h4><a href="cases.html">滑坡监测</a><a href="cases.html">地铁沿线形变</a><a href="cases.html">矿区沉降</a><a href="cases.html">大坝安全评估</a></div>
-    <div><h4>联系</h4><a href="about.html">关于我们</a><a href="about.html">联系方式</a><a href="about.html">技术合作</a></div>
+    <div><h4>服务</h4><a href="solutions.html">地质灾害监测</a><a href="solutions.html">基础设施安全</a><a href="solutions.html">矿区形变监测</a><a href="solutions.html">地震 InSAR</a></div>
+    <div><h4>案例</h4><a href="cases.html">滑坡监测</a><a href="cases.html">地铁监测</a><a href="cases.html">矿区沉降</a><a href="cases.html">地震响应</a></div>
+    <div><h4>联系</h4><a href="about.html">关于我们</a></div>
   </div>
-  <div class="footer-bottom">© 2026 地微科技. All rights reserved.</div>
+  <div class="footer-bottom">© 2026 地微科技</div>
 </footer>
 
 <script src="js/main.js"></script>
