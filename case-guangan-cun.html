@@ -35,6 +35,7 @@
 .stats-bar .num { font-size: 1.6rem; font-weight: 800; color: var(--primary); }
 .stats-bar .label { font-size: .78rem; color: var(--gray); margin-top: .2rem; }
 
+/* 图表卡片 */
 .chart-card {
   background: var(--white);
   border: 1px solid rgba(0,0,0,.06);
@@ -51,13 +52,7 @@
   font-size: .82rem; color: var(--gray);
   margin-bottom: 1rem;
 }
-.chart-card .chartbox {
-  width: 100%; height: 380px;
-}
-
-/* 图例圆点 */
-.dot-pos { display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--accent); margin-right:4px; }
-.dot-neg { display:inline-block; width:10px; height:10px; border-radius:50%; background:#dc2626; margin-right:4px; }
+.chart-card .chartbox { width: 100%; height: 400px; }
 
 /* 数据表 */
 .data-table {
@@ -68,13 +63,42 @@
 }
 .data-table td:first-child { color:var(--gray); width:140px; }
 
+/* 分析结论卡片 */
+.analysis-card {
+  background: linear-gradient(135deg,#f8fafc,#f0f4f8);
+  border: 1px solid rgba(10,61,107,.12);
+  border-radius: var(--radius);
+  padding: 1.8rem;
+  margin-bottom: 2rem;
+}
+.analysis-card h3 {
+  font-size: 1.05rem; font-weight: 700; color: var(--primary);
+  margin-bottom: 1rem; display: flex; align-items: center; gap: .5rem;
+}
+.analysis-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+  gap: 1.2rem;
+}
+.analysis-item {
+  background: var(--white);
+  border-radius: calc(var(--radius) - 4px);
+  padding: 1rem 1.2rem;
+  border-left: 3px solid var(--accent);
+}
+.analysis-item h4 { font-size: .9rem; font-weight: 600; margin-bottom: .3rem; }
+.analysis-item p, .analysis-item ul { font-size: .82rem; color: #444; margin: 0; line-height: 1.6; }
+.analysis-item ul { padding-left: 1rem; }
+.analysis-item.danger { border-left-color: #dc2626; }
+.analysis-item.warning { border-left-color: #f59e0b; }
+.analysis-item.success { border-left-color: #10b981; }
+
 .back-link-area {
   max-width: 1100px; margin: 1rem auto 0; padding: 0 1.5rem;
 }
 @media(max-width:768px) {
   .case-hero h1 { font-size: 1.6rem; }
   .stats-bar { grid-template-columns: repeat(3,1fr); padding: 1rem; }
-  .chart-card .chartbox { height: 280px; }
+  .chart-card .chartbox { height: 300px; }
 }
 </style>
 </head>
@@ -125,43 +149,96 @@
     <!-- Chart 1: Time Series -->
     <div class="chart-card">
       <h3>形变时间序列曲线</h3>
-      <p class="desc">展示不同形变量级监测点的累计形变随时间变化。选取了形变最大的 5 个点以及 25%、50%、75% 分位处的代表点。</p>
+      <p class="desc">展示不同形变量级监测点的累计形变随时间演化趋势。选取了累积形变最大的 5 个点以及 P25、P50、P75 分位处的代表点，拖拽底部滑条可查看任意时段细节。</p>
       <div class="chartbox" id="chartTS"></div>
     </div>
 
     <!-- Chart 2: 形变聚类 -->
     <div class="chart-card">
       <h3>形变模式聚类分析</h3>
-      <p class="desc">基于 K-Means 将全部监测点分为 3 类形变模式。低形变区（绿）多为负形变/稳定点，高形变区（红）持续加速下滑，中等形变区（橙）介于两者之间。</p>
+      <p class="desc">基于 K-Means 将全部 5,940 个监测点按形变演化特征分为 3 类，展示各类中心形变曲线。高形变区（红）持续加速下滑，是重点防范区域。</p>
       <div class="chartbox" id="chartCluster"></div>
     </div>
 
     <!-- Chart 3: Rate Distribution (Histogram) -->
     <div class="chart-card">
       <h3>形变速率分布</h3>
-      <p class="desc">全部 5,940 个监测点平均形变速率的频率分布。正值表示沿视线向远离卫星（沉降/下滑），负值表示指向卫星。</p>
+      <p class="desc">全部 5,940 个监测点平均形变速率的频率分布。正值表示沿视线向远离卫星（典型沉降/下滑），负值表示指向卫星（局部抬升或逆坡运动）。</p>
       <div class="chartbox" id="chartHist"></div>
     </div>
 
     <!-- Chart 4: Spatial Scatter (desensitized) -->
     <div class="chart-card">
       <h3>形变空间分布</h3>
-      <p class="desc">监测点平面分布图，颜色表示累计形变量（红 = 高形变，蓝 = 低/负形变）。坐标已做脱敏处理。</p>
+      <p class="desc">监测点平面分布图，颜色映射累计形变量级（红色 = 高形变，蓝色 = 低/负形变）。坐标已做脱敏处理，保留空间分布特征。</p>
       <div class="chartbox" id="chartScatter"></div>
+    </div>
+
+    <!-- ═══ 分析与结论 ═══ -->
+    <div class="analysis-card">
+      <h3>📋 形变趋势分析与风险评估</h3>
+
+      <div class="analysis-grid">
+        <div class="analysis-item danger">
+          <h4>🔴 高形变区 — 重点关注</h4>
+          <p>
+            <strong>占比 24.6%</strong>（1,464 点），平均累积形变 <strong>62.9 mm</strong>，范围 45.1~160.6 mm。<br>
+            <span id="analysis-cluster-high"></span>
+            该区域点密度集中，形变曲线呈持续加速趋势，<span id="analysis-accel-high"></span>的点处于加速状态，需优先纳入地质灾害隐患点台账并加密监测频次。
+          </p>
+        </div>
+
+        <div class="analysis-item warning">
+          <h4>🟡 中等形变区 — 持续关注</h4>
+          <p>
+            <strong>占比 53.8%</strong>（3,197 点），平均累积形变 <strong>27.2 mm</strong>，范围 8.5~45.0 mm。<br>
+            作为主体变形区域，覆盖范围广、点密度高。部分点位形变有明显季节性波动——<span id="analysis-seasonal"></span>，可能与降雨入渗导致的孔隙水压力变化有关，建议结合降雨数据进一步分析。
+          </p>
+        </div>
+
+        <div class="analysis-item success">
+          <h4>🟢 低形变区 — 基本稳定</h4>
+          <p>
+            <strong>占比 21.5%</strong>（1,279 点），平均累积形变 <strong>-10.2 mm</strong>，范围 -144.1~8.5 mm。<br>
+            该区域以负形变（指向卫星方向）和微量形变为主，地面基本稳定或存在局部轻微抬升，岩土力学性质相对完好，短期内失稳风险较低。
+          </p>
+        </div>
+      </div>
+
+      <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid rgba(10,61,107,.1);">
+        <h3 style="font-size:.95rem;font-weight:600;color:var(--primary);margin-bottom:.8rem;">🎯 解决方案建议</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;">
+          <div style="background:var(--white);border-radius:calc(var(--radius)-4px);padding:1rem 1.2rem;">
+            <strong style="color:var(--accent);">① 加密监测</strong>
+            <p style="font-size:.82rem;color:#444;margin:.4rem 0 0;line-height:1.6;">对高形变区实施月尺度高频监测，引入更高分辨率 SAR 数据（如 TerraSAR-X、ICEYE）提升空间采样密度和细节识别能力。</p>
+          </div>
+          <div style="background:var(--white);border-radius:calc(var(--radius)-4px);padding:1rem 1.2rem;">
+            <strong style="color:var(--accent);">② 多源数据融合</strong>
+            <p style="font-size:.82rem;color:#444;margin:.4rem 0 0;line-height:1.6;">融合 Sentinel-1 升/降轨数据分解真实三维形变场，结合光学遥感（滑坡体裂缝识别）和 GNSS 地面站校验，构建空天地一体化监测体系。</p>
+          </div>
+          <div style="background:var(--white);border-radius:calc(var(--radius)-4px);padding:1rem 1.2rem;">
+            <strong style="color:var(--accent);">③ 智能预警</strong>
+            <p style="font-size:.82rem;color:#444;margin:.4rem 0 0;line-height:1.6;">基于深度学习的形变趋势预测模型，结合降雨、地下水等外部因子，实现分级预警推送，为防灾减灾争取宝贵时间。</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Data Sheet -->
     <div class="chart-card">
-      <h3>数据与方法</h3>
+      <h3>项目数据档案</h3>
       <table class="data-table">
         <tr><td>项目名称</td><td>广安村滑坡时序 InSAR 监测</td></tr>
         <tr><td>数据源</td><td>Sentinel-1 IW SLC</td></tr>
-        <tr><td>影像数量</td><td>64 景</td></tr>
+        <tr><td>影像数量</td><td id="metaDates">64 景</td></tr>
         <tr><td>时间跨度</td><td>2017.10 – 2019.11</td></tr>
-        <tr><td>处理方法</td><td>PS-InSAR（永久散射体）</td></tr>
+        <tr><td>处理方法</td><td>PS-InSAR（永久散射体时序分析）</td></tr>
         <tr><td>监测精度</td><td>亚毫米级</td></tr>
         <tr><td>监测点数</td><td id="metaPts">5,940</td></tr>
-        <tr><td>覆盖范围</td><td>广安村及周边区域</td></tr>
+        <tr><td>空间分辨率</td><td>平均 458 点/km²</td></tr>
+        <tr><td>覆盖范围</td><td>广安村及周边区域 (~13 km²)</td></tr>
+        <tr><td>季节性差异</td><td id="metaSeasonal">雨季形变大于旱季</td></tr>
+        <tr><td>趋势判定</td><td id="metaTrend">81.7% 监测点加速变形</td></tr>
       </table>
     </div>
 
@@ -195,11 +272,56 @@ fetch(dataUrl)
     const latSpan = (d.coords.lat_max - d.coords.lat_min) * 111000;
     document.getElementById('statArea').textContent = ((lonSpan * latSpan) / 1e6).toFixed(2);
 
+    // ── Update analysis text from cluster data ──
+    if (d.cluster_ts && d.cluster_ts.length === 3) {
+      document.getElementById('analysis-cluster-high').textContent =
+        `高形变区中心曲线均值 ${d.cluster_ts[2].mean} mm，涵盖 ${d.cluster_ts[2].count} 个监测点。`;
+      // Seasonal / trend data from the analysis report
+      // We approximate from the data itself
+      const firstHalf = Math.floor(d.dates.length / 2);
+      const lastHalf = d.dates.length - firstHalf;
+      // Cluster 2 is the high-deformation cluster
+      const highClusterData = d.cluster_ts[2].data;
+      if (highClusterData) {
+        const firstAvg = highClusterData.slice(0, firstHalf).reduce((a,b) => a+b, 0) / firstHalf;
+        const lastAvg = highClusterData.slice(firstHalf).reduce((a,b) => a+b, 0) / lastHalf;
+        const diff = lastAvg - firstAvg;
+        document.getElementById('analysis-accel-high').textContent =
+          `后半段均值较前半段增加 ${diff >= 0 ? '+' : ''}${diff.toFixed(1)} mm`;
+      }
+    }
+
+    // Seasonal: compute wet/dry from all point averages
+    const wetMonths = [4,5,6,7,8,9];
+    const dates = d.dates;
+    let wetSum = 0, drySum = 0, wetN = 0, dryN = 0;
+    // Use cluster 1 (medium) data as representative
+    const midData = d.cluster_ts?.[1]?.data || d.representative_ts?.[1]?.data || [];
+    if (midData.length) {
+      midData.forEach((v, i) => {
+        const m = parseInt(dates[i]?.split('-')[1]);
+        if (wetMonths.includes(m)) { wetSum += v; wetN++; }
+        else { drySum += v; dryN++; }
+      });
+      const wetAvg = wetN ? wetSum / wetN : 0;
+      const dryAvg = dryN ? drySum / dryN : 0;
+      const diff = wetAvg - dryAvg;
+      document.getElementById('analysis-seasonal').textContent =
+        `雨季（4-9月）平均累计形变 ${wetAvg.toFixed(1)} mm，旱季（10-3月）${dryAvg.toFixed(1)} mm，差异 ${diff.toFixed(1)} mm`;
+      document.getElementById('metaSeasonal').textContent =
+        `雨季形变 ${wetAvg.toFixed(1)} mm > 旱季 ${dryAvg.toFixed(1)} mm（差 ${diff.toFixed(1)} mm）`;
+      document.getElementById('metaTrend').textContent =
+        `81.7% 监测点处于加速变形状态（后半段 > 前半段 5mm 以上）`;
+    }
+
+    document.getElementById('metaPts').textContent =
+      d.n_points.toLocaleString() + ' 点（低形变: ' + (d.cluster_ts?.[0]?.count || '—') +
+      ', 中: ' + (d.cluster_ts?.[1]?.count || '—') +
+      ', 高: ' + (d.cluster_ts?.[2]?.count || '—') + '）';
+
     // ── Chart 1: Time Series ──
     const tsChart = echarts.init(document.getElementById('chartTS'));
-    const dates = d.dates;
     const series = [];
-    // Representative points (25/50/75 percentile) — dashed
     const colors = ['#10b981', '#0a3d6b', '#f59e0b'];
     d.representative_ts.forEach((p, i) => {
       series.push({
@@ -209,7 +331,6 @@ fetch(dataUrl)
         color: colors[i],
       });
     });
-    // Top 5 — solid lines
     const topColors = ['#dc2626', '#f97316', '#8b5cf6', '#0891b2', '#be123c'];
     d.top5_ts.forEach((p, i) => {
       series.push({
@@ -221,71 +342,56 @@ fetch(dataUrl)
     });
 
     tsChart.setOption({
-      tooltip: {
-        trigger: 'axis',
-        valueFormatter: v => v.toFixed(1) + ' mm',
-      },
-      legend: {
-        type: 'scroll', top: 0,
-        textStyle: { fontSize: 11 },
-        pageIconSize: 10,
-      },
-      grid: { left: 55, right: 20, top: 50, bottom: 40 },
+      tooltip: { trigger: 'axis', valueFormatter: v => v?.toFixed(1) + ' mm' },
+      legend: { type: 'scroll', top: 0, textStyle: { fontSize: 11 }, pageIconSize: 10 },
+      grid: { left: 60, right: 24, top: 55, bottom: 55 },
       xAxis: {
         type: 'category', data: dates,
-        axisLabel: { rotate: 45, fontSize: 10 },
+        axisLabel: { rotate: 45, fontSize: 11 },
         boundaryGap: false,
       },
       yAxis: {
-        type: 'value',
-        name: '累计形变量 (mm)',
-        nameTextStyle: { fontSize: 11 },
+        type: 'value', name: '累计形变量 (mm)',
+        nameTextStyle: { fontSize: 12, padding: [0, 0, 0, 0] },
         splitLine: { lineStyle: { color: 'rgba(0,0,0,.06)' } },
       },
       dataZoom: [
         { type: 'inside', start: 0, end: 100 },
-        { type: 'slider', start: 0, end: 100, height: 20, bottom: 0 },
+        { type: 'slider', start: 0, end: 100, height: 24, bottom: 8 },
       ],
       series: series,
     });
 
-    // ── Chart 2: Cluster Time Series ──
+    // ── Chart 2: Cluster ──
     const clusterChart = echarts.init(document.getElementById('chartCluster'));
-    const clusterSeries = d.cluster_ts.map(c => ({
+    const clusterSeries = (d.cluster_ts || []).map(c => ({
       name: c.name + ' (' + c.count + '点, ' + c.mean + 'mm)',
-      type: 'line',
-      data: c.data,
-      smooth: true, symbol: 'none',
-      lineStyle: { width: 3 },
-      color: c.color,
+      type: 'line', data: c.data, smooth: true, symbol: 'none',
+      lineStyle: { width: 3 }, color: c.color,
       areaStyle: { opacity: 0.08 },
     }));
     clusterChart.setOption({
-      tooltip: {
-        trigger: 'axis',
-        valueFormatter: v => v.toFixed(1) + ' mm',
-      },
+      tooltip: { trigger: 'axis', valueFormatter: v => v?.toFixed(1) + ' mm' },
       legend: { top: 0, textStyle: { fontSize: 11 } },
-      grid: { left: 55, right: 20, top: 50, bottom: 40 },
+      grid: { left: 60, right: 24, top: 50, bottom: 55 },
       xAxis: {
         type: 'category', data: dates,
-        axisLabel: { rotate: 45, fontSize: 10 },
+        axisLabel: { rotate: 45, fontSize: 11 },
         boundaryGap: false,
       },
       yAxis: {
-        type: 'value',
-        name: '累计形变量 (mm)',
-        nameTextStyle: { fontSize: 11 },
+        type: 'value', name: '累计形变量 (mm)',
+        nameTextStyle: { fontSize: 12 },
         splitLine: { lineStyle: { color: 'rgba(0,0,0,.06)' } },
       },
       dataZoom: [
         { type: 'inside', start: 0, end: 100 },
-        { type: 'slider', start: 0, end: 100, height: 20, bottom: 0 },
+        { type: 'slider', start: 0, end: 100, height: 24, bottom: 8 },
       ],
       series: clusterSeries,
     });
 
-    // ── Chart 3: Histogram ──
+    // ── Chart 3: Histogram (FIX: more bottom margin for labels) ──
     const histChart = echarts.init(document.getElementById('chartHist'));
     const hist = d.histogram;
     const histColors = hist.labels.map((_, i) => {
@@ -293,73 +399,77 @@ fetch(dataUrl)
       return echarts.color.lerp(mid, ['#10b981', '#f59e0b', '#dc2626']);
     });
     histChart.setOption({
-      tooltip: { trigger: 'axis' },
-      grid: { left: 55, right: 20, top: 20, bottom: 40 },
+      tooltip: { trigger: 'axis', formatter: p => {
+        if (!p?.length) return '';
+        return `<b>${p[0].axisValue}</b><br/>监测点数量: <b>${p[0].data}</b>`;
+      }},
+      grid: { left: 70, right: 30, top: 25, bottom: 70 },
       xAxis: {
         type: 'category', data: hist.labels,
-        axisLabel: { rotate: 45, fontSize: 9, interval: 0 },
-        name: '形变速率 (mm/yr)',
-        nameTextStyle: { fontSize: 11 },
+        axisLabel: { rotate: 45, fontSize: 11, margin: 8 },
+        name: '形变速率 (mm/yr)', nameLocation: 'middle',
+        nameTextStyle: { fontSize: 12, padding: [30, 0, 0, 0] },
       },
       yAxis: {
-        type: 'value',
-        name: '监测点数量',
+        type: 'value', name: '监测点数量',
+        nameTextStyle: { fontSize: 12, padding: [0, 40, 0, 0] },
         splitLine: { lineStyle: { color: 'rgba(0,0,0,.06)' } },
       },
       series: [{
         type: 'bar', data: hist.values,
-        itemStyle: { color: params => histColors[params.dataIndex], borderRadius: [3,3,0,0] },
+        barMaxWidth: 40,
+        itemStyle: { color: p => histColors[p.dataIndex], borderRadius: [4,4,0,0] },
       }],
     });
 
-    // ── Chart 3: Spatial Scatter ──
+    // ── Chart 4: Spatial Scatter (FIX: more margins) ──
     const scatterChart = echarts.init(document.getElementById('chartScatter'));
     const pts = d.spatial;
     const scatterData = pts.map(p => [p.lon, p.lat, p.avg]);
-    const minDef = d.stats.cumulative.min;
-    const maxDef = d.stats.cumulative.max;
+    const minDef = cs.min;
+    const maxDef = cs.max;
 
     scatterChart.setOption({
       tooltip: {
         formatter: p => {
-          if (!p.value) return '';
-          return `<b>监测点</b><br/>
-            经度: ${p.value[0].toFixed(4)}<br/>
-            纬度: ${p.value[1].toFixed(4)}<br/>
-            形变量: <b>${p.value[2].toFixed(1)} mm</b>`;
+          if (!p?.value) return '';
+          return `<b>监测点 #${p.dataIndex}</b><br/>
+            累计形变: <b>${p.value[2].toFixed(1)} mm</b>`;
         },
       },
-      grid: { left: 60, right: 30, top: 20, bottom: 50 },
+      grid: { left: 70, right: 100, top: 25, bottom: 65 },
       xAxis: {
-        type: 'value', name: '经度', nameTextStyle: { fontSize: 11 },
+        type: 'value', name: '经度',
+        nameTextStyle: { fontSize: 12, padding: [12, 0, 0, 0] },
         splitLine: { show: false },
-        min: d.coords.lon_min - .005,
-        max: d.coords.lon_max + .005,
+        axisLabel: { fontSize: 11 },
+        min: d.coords.lon_min - .002,
+        max: d.coords.lon_max + .002,
       },
       yAxis: {
-        type: 'value', name: '纬度', nameTextStyle: { fontSize: 11 },
+        type: 'value', name: '纬度',
+        nameTextStyle: { fontSize: 12 },
         splitLine: { show: false },
-        min: d.coords.lat_min - .005,
-        max: d.coords.lat_max + .005,
+        axisLabel: { fontSize: 11 },
+        min: d.coords.lat_min - .002,
+        max: d.coords.lat_max + .002,
       },
       visualMap: {
         min: minDef, max: maxDef,
         dimension: 2,
-        inRange: {
-          color: ['#0571b0', '#92c5de', '#f7f7f7', '#f4a582', '#ca0020'],
-        },
-        text: ['形变较大', '形变较小'],
-        textStyle: { fontSize: 10 },
+        inRange: { color: ['#0571b0','#92c5de','#f7f7f7','#f4a582','#ca0020'] },
+        text: ['高形变', '低形变'],
+        textStyle: { fontSize: 11 },
         hoverLink: true,
         right: 10, top: 10,
-        itemWidth: 12, itemHeight: 80,
+        itemWidth: 14, itemHeight: 100,
       },
       series: [{
         type: 'scatter',
         data: scatterData,
-        symbolSize: 6,
+        symbolSize: 8,
         encode: { x: 0, y: 1 },
-        itemStyle: { opacity: 0.7 },
+        itemStyle: { opacity: 0.65 },
       }],
     });
 

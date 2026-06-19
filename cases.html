@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -7,22 +7,66 @@
 <link rel="stylesheet" href="css/style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* Force 2-column grid for case cards */
-.case-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
-@media(max-width:768px) { .case-grid { grid-template-columns:1fr; } }
-
+/* 分类滑块布局 */
+.category-block { grid-column:1/-1; margin-bottom:1rem; }
 .category-header {
-  grid-column:1/-1;
   display:flex; align-items:center; gap:.8rem;
-  margin-top:2rem; margin-bottom:.5rem;
+  margin-bottom:.8rem;
 }
-.category-header:first-of-type { margin-top:0; }
 .category-header .line { flex:1; height:2px; background:linear-gradient(90deg,var(--primary),transparent); }
 .category-header h3 { font-size:1.1rem; color:var(--primary); font-weight:600; white-space:nowrap; }
 .category-header .badge {
   font-size:.75rem; padding:.15rem .6rem; border-radius:20px;
   background:var(--light-gray); color:var(--gray); font-weight:500;
 }
+
+/* 滑块容器 */
+.slider-wrapper {
+  position: relative;
+}
+.slider-track {
+  display: flex; gap: 2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;           /* Firefox */
+}
+.slider-track::-webkit-scrollbar { display:none; }  /* Chrome/Safari */
+.slider-track .card {
+  flex: 0 0 calc(50% - 1rem);
+  scroll-snap-align: start;
+  min-width: 0;
+}
+@media(max-width:768px) {
+  .slider-track .card { flex: 0 0 calc(100vw - 3rem); }
+}
+
+/* 左右箭头 */
+.slider-arrow {
+  position: absolute; top: 50%; transform:translateY(-50%);
+  z-index: 3;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid rgba(0,0,0,.1);
+  background: var(--white);
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; color: var(--primary);
+  transition: all .2s;
+}
+.slider-arrow:hover { background: var(--primary); color: var(--white); }
+.slider-arrow.left  { left: -18px; }
+.slider-arrow.right { right: -18px; }
+.slider-arrow.hidden { display:none; }
+@media(max-width:768px) {
+  .slider-arrow { display:none; }
+}
+
+/* 案例卡片内部 */
+.card.case-card { height:100%; }
+.case-card .case-body { display:flex; flex-direction:column; flex:1; }
+.case-card .case-body p { flex:1; }
 </style>
 </head>
 <body>
@@ -48,171 +92,180 @@
 <section class="section">
   <div class="container">
 
-    <div class="case-grid">
+    <!-- ═══ 地质灾害 ═══ -->
+    <div class="category-block" id="cat-geo">
+      <div class="category-header"><h3>地质灾害监测</h3><span class="badge">2 个项目</span><span class="line"></span></div>
+      <div class="slider-wrapper">
+        <div class="slider-track">
 
-      <!-- ═══ 地质灾害 ═══ -->
-      <div class="category-header"><h3>地质灾害监测</h3><span class="badge">3 个项目</span><span class="line"></span></div>
+          <a href="case-guangan-cun.html" class="card case-card" style="text-decoration:none;color:inherit;">
+            <div class="case-image" style="background:linear-gradient(135deg,#1a5a8f,#0a3d6b);">📍</div>
+            <div class="case-body">
+              <span class="card-tag amber">地质灾害</span>
+              <h3>广安村滑坡时序 InSAR 监测</h3>
+              <p>基于 64 景 Sentinel-1 影像对广安村区域进行 PS-InSAR 时序分析。5,940 个监测点揭示最大累计形变 160.6 mm，平均形变 27.95 mm，并识别出高、中、低三种形变模式区。</p>
+              <div class="case-stats">
+                <div class="case-stat"><div class="num">5,940</div><div class="label">监测点</div></div>
+                <div class="case-stat"><div class="num">160.6</div><div class="label">mm 最大形变</div></div>
+                <div class="case-stat"><div class="num">64</div><div class="label">景 Sentinel-1</div></div>
+              </div>
+            </div>
+          </a>
 
-      <!-- 广安村滑坡 -->
-      <a href="case-guangan-cun.html" style="text-decoration:none;color:inherit;display:contents;">
-      <div class="card case-card">
-        <div class="case-image" style="background:linear-gradient(135deg,#1a5a8f,#0a3d6b);">📍</div>
-        <div class="case-body">
-          <span class="card-tag amber">地质灾害</span>
-          <h3>广安村滑坡时序 InSAR 监测</h3>
-          <p>基于 64 景 Sentinel-1 影像对广安村区域进行 PS-InSAR 时序分析。5,940 个监测点揭示最大累计形变 160.6 mm，平均形变 27.95 mm，并识别出高、中、低三种形变模式区。</p>
-          <div class="case-stats">
-            <div class="case-stat"><div class="num">5,940</div><div class="label">监测点</div></div>
-            <div class="case-stat"><div class="num">160.6</div><div class="label">mm 最大形变</div></div>
-            <div class="case-stat"><div class="num">64</div><div class="label">景 Sentinel-1</div></div>
-          </div>
+          <a href="cases.html" class="card case-card" style="text-decoration:none;color:inherit;">
+            <div class="case-image" style="background:linear-gradient(135deg,#0891b2,#065f73);">🏔</div>
+            <div class="case-body">
+              <span class="card-tag blue">地质灾害</span>
+              <h3>桃坪乡古滑坡多维监测及形变分解</h3>
+              <p>利用近 5 年 Sentinel-1 数据完成桃坪乡古滑坡多视线向累计形变监测，基于地形进行形变分解，最大沿坡向形变速率达 106 mm/yr，基于深度学习进行形变趋势预测，评估出 2 处失稳风险预警。</p>
+              <div class="case-stats">
+                <div class="case-stat"><div class="num">5</div><div class="label">年数据</div></div>
+                <div class="case-stat"><div class="num">106</div><div class="label">mm/yr 最大</div></div>
+                <div class="case-stat"><div class="num">2</div><div class="label">失稳预警</div></div>
+              </div>
+            </div>
+          </a>
+
+          <!-- placeholder for even count will not break grid -->
+
         </div>
+        <button class="slider-arrow left" onclick="scrollSlider('cat-geo', -1)">‹</button>
+        <button class="slider-arrow right" onclick="scrollSlider('cat-geo', 1)">›</button>
       </div>
-      </a>
+    </div>
 
-      <!-- 桃坪乡 -->
-      <a href="cases.html" style="text-decoration:none;color:inherit;display:contents;">
-      <div class="card case-card">
-        <div class="case-image" style="background:linear-gradient(135deg,#0891b2,#065f73);">🏔</div>
-        <div class="case-body">
-          <span class="card-tag blue">地质灾害</span>
-          <h3>桃坪乡古滑坡多维监测及形变分解</h3>
-          <p>利用近 5 年 Sentinel-1 数据完成桃坪乡古滑坡多视线向累计形变监测，基于地形进行形变分解，最大沿坡向形变速率达 106 mm/yr，基于深度学习进行形变趋势预测，评估出 2 处失稳风险预警。</p>
-          <div class="case-stats">
-            <div class="case-stat"><div class="num">5</div><div class="label">年数据</div></div>
-            <div class="case-stat"><div class="num">106</div><div class="label">mm/yr 最大</div></div>
-            <div class="case-stat"><div class="num">2</div><div class="label">失稳预警</div></div>
-          </div>
-        </div>
-      </div>
-      </a>
-
-      <!-- ═══ 基础设施 ═══ -->
+    <!-- ═══ 基础设施 ═══ -->
+    <div class="category-block" id="cat-infra">
       <div class="category-header"><h3>基础设施安全</h3><span class="badge">1 个项目</span><span class="line"></span></div>
+      <div class="slider-wrapper">
+        <div class="slider-track">
 
-      <!-- 郑州地铁 -->
-      <a href="case-zhengzhou-metro.html" style="text-decoration:none;color:inherit;display:contents;">
-      <div class="card case-card">
-        <div class="case-image" style="background:linear-gradient(135deg,#0a3d6b,#00a8cc);">🚇</div>
-        <div class="case-body">
-          <span class="card-tag blue">基础设施</span>
-          <h3>郑州市地铁沿线形变监测</h3>
-          <p>对运营中地铁 3 号线沿线 500 m 缓冲区进行时序 InSAR 分析。发现 3 处差异沉降段，最大沉降速率达 8.2 mm/yr，为轨道养护提供依据。</p>
-          <div class="case-stats">
-            <div class="case-stat"><div class="num">36</div><div class="label">景 Sentinel-1</div></div>
-            <div class="case-stat"><div class="num">8.2</div><div class="label">mm/yr 最大沉降</div></div>
-            <div class="case-stat"><div class="num">12</div><div class="label">km 监测段</div></div>
-          </div>
+          <a href="case-zhengzhou-metro.html" class="card case-card" style="text-decoration:none;color:inherit;">
+            <div class="case-image" style="background:linear-gradient(135deg,#0a3d6b,#00a8cc);">🚇</div>
+            <div class="case-body">
+              <span class="card-tag blue">基础设施</span>
+              <h3>郑州市地铁沿线形变监测</h3>
+              <p>对运营中地铁 3 号线沿线 500 m 缓冲区进行时序 InSAR 分析。发现 3 处差异沉降段，最大沉降速率达 8.2 mm/yr，为轨道养护提供依据。</p>
+              <div class="case-stats">
+                <div class="case-stat"><div class="num">36</div><div class="label">景 Sentinel-1</div></div>
+                <div class="case-stat"><div class="num">8.2</div><div class="label">mm/yr 最大沉降</div></div>
+                <div class="case-stat"><div class="num">12</div><div class="label">km 监测段</div></div>
+              </div>
+            </div>
+          </a>
+
         </div>
       </div>
-      </a>
+    </div>
 
-      <!-- 空位占位（保持布局） -->
-      <div style="display:contents;"></div>
-
-      <!-- ═══ 矿区监测 ═══ -->
+    <!-- ═══ 矿区监测 ═══ -->
+    <div class="category-block" id="cat-mine">
       <div class="category-header"><h3>矿区形变监测</h3><span class="badge">1 个项目</span><span class="line"></span></div>
+      <div class="slider-wrapper">
+        <div class="slider-track">
 
-      <!-- 大同矿区 -->
-      <a href="cases.html" style="text-decoration:none;color:inherit;display:contents;">
-      <div class="card case-card">
-        <div class="case-image" style="background:linear-gradient(135deg,#10b981,#059669);">⛏</div>
-        <div class="case-body">
-          <span class="card-tag green">矿山监测</span>
-          <h3>山西大同矿区地表沉降</h3>
-          <p>对煤矿采空区进行 5 年时序 InSAR 监测。最大沉降速率达 -76 mm/yr，识别出多处次生活化区并触发预警响应。</p>
-          <div class="case-stats">
-            <div class="case-stat"><div class="num">5</div><div class="label">年跨度</div></div>
-            <div class="case-stat"><div class="num">-76</div><div class="label">mm/yr 最大</div></div>
-            <div class="case-stat"><div class="num">预警</div><div class="label">触发响应</div></div>
-          </div>
+          <a href="cases.html" class="card case-card" style="text-decoration:none;color:inherit;">
+            <div class="case-image" style="background:linear-gradient(135deg,#10b981,#059669);">⛏</div>
+            <div class="case-body">
+              <span class="card-tag green">矿山监测</span>
+              <h3>山西大同矿区地表沉降</h3>
+              <p>对煤矿采空区进行 5 年时序 InSAR 监测。最大沉降速率达 -76 mm/yr，识别出多处次生活化区并触发预警响应。</p>
+              <div class="case-stats">
+                <div class="case-stat"><div class="num">5</div><div class="label">年跨度</div></div>
+                <div class="case-stat"><div class="num">-76</div><div class="label">mm/yr 最大</div></div>
+                <div class="case-stat"><div class="label">预警触发</div><div class="label">响应</div></div>
+              </div>
+            </div>
+          </a>
+
         </div>
       </div>
-      </a>
+    </div>
 
-      <!-- ═══ 城市沉降 ═══ -->
+    <!-- ═══ 城市沉降 ═══ -->
+    <div class="category-block" id="cat-city">
       <div class="category-header"><h3>城市地面沉降</h3><span class="badge">1 个项目</span><span class="line"></span></div>
+      <div class="slider-wrapper">
+        <div class="slider-track">
 
-      <!-- 平顶山 -->
-      <a href="cases.html" style="text-decoration:none;color:inherit;display:contents;">
-      <div class="card case-card">
-        <div class="case-image" style="background:linear-gradient(135deg,#f59e0b,#d97706);">🌆</div>
-        <div class="case-body">
-          <span class="card-tag amber">城市沉降</span>
-          <h3>平顶山市地面沉降制图</h3>
-          <p>利用 86 景 Sentinel-1 数据完成平顶山市 800 km² 城区年沉降速率图。识别出 3 个沉降漏斗，结合地下水位数据验证沉降成因。</p>
-          <div class="case-stats">
-            <div class="case-stat"><div class="num">86</div><div class="label">景 Sentinel-1</div></div>
-            <div class="case-stat"><div class="num">3</div><div class="label">沉降漏斗</div></div>
-            <div class="case-stat"><div class="num">800</div><div class="label">km² 覆盖</div></div>
-          </div>
+          <a href="cases.html" class="card case-card" style="text-decoration:none;color:inherit;">
+            <div class="case-image" style="background:linear-gradient(135deg,#f59e0b,#d97706);">🌆</div>
+            <div class="case-body">
+              <span class="card-tag amber">城市沉降</span>
+              <h3>平顶山市地面沉降制图</h3>
+              <p>利用 86 景 Sentinel-1 数据完成平顶山市 800 km² 城区年沉降速率图。识别出 3 个沉降漏斗，结合地下水位数据验证沉降成因。</p>
+              <div class="case-stats">
+                <div class="case-stat"><div class="num">86</div><div class="label">景 Sentinel-1</div></div>
+                <div class="case-stat"><div class="num">3</div><div class="label">沉降漏斗</div></div>
+                <div class="case-stat"><div class="num">800</div><div class="label">km² 覆盖</div></div>
+              </div>
+            </div>
+          </a>
+
         </div>
       </div>
-      </a>
+    </div>
 
-      <!-- 空位占位 -->
-      <div style="display:contents;"></div>
-
-      <!-- ═══ 地震监测 ═══ -->
+    <!-- ═══ 地震监测 ═══ -->
+    <div class="category-block" id="cat-eq">
       <div class="category-header"><h3>地震 InSAR 监测</h3><span class="badge">2 个项目</span><span class="line"></span></div>
+      <div class="slider-wrapper">
+        <div class="slider-track">
 
-      <!-- 积石山 -->
-      <a href="cases.html" style="text-decoration:none;color:inherit;display:contents;">
-      <div class="card case-card">
-        <div class="case-image" style="background:linear-gradient(135deg,#dc2626,#991b1b);">🌍</div>
-        <div class="case-body">
-          <span class="card-tag amber" style="background:rgba(220,38,38,.1);color:#dc2626;">地震监测</span>
-          <h3>甘肃积石山地震 DInSAR 快速响应</h3>
-          <p>利用灾前灾后 Sentinel-1 影像进行差分干涉测量，快速提取同震形变场，为震害评估与应急决策提供依据。</p>
-          <div class="case-stats">
-            <div class="case-stat"><div class="num">4</div><div class="label">景数据</div></div>
-            <div class="case-stat"><div class="num">快速</div><div class="label">应急响应</div></div>
-            <div class="case-stat"><div class="num">DInSAR</div><div class="label">方法</div></div>
-          </div>
+          <a href="cases.html" class="card case-card" style="text-decoration:none;color:inherit;">
+            <div class="case-image" style="background:linear-gradient(135deg,#dc2626,#991b1b);">🌍</div>
+            <div class="case-body">
+              <span class="card-tag amber" style="background:rgba(220,38,38,.1);color:#dc2626;">地震监测</span>
+              <h3>甘肃积石山地震 DInSAR 快速响应</h3>
+              <p>利用灾前灾后 Sentinel-1 影像进行差分干涉测量，快速提取同震形变场，为震害评估与应急决策提供依据。</p>
+              <div class="case-stats">
+                <div class="case-stat"><div class="num">4</div><div class="label">景数据</div></div>
+                <div class="case-stat"><div class="fast-label">快速应急响应</div></div>
+                <div class="case-stat"><div class="num">DInSAR</div><div class="label">方法</div></div>
+              </div>
+            </div>
+          </a>
+
+          <a href="cases.html" class="card case-card" style="text-decoration:none;color:inherit;">
+            <div class="case-image" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);">🔬</div>
+            <div class="case-body">
+              <span class="card-tag amber" style="background:rgba(124,58,237,.1);color:#7c3aed;">地震研究</span>
+              <h3>龙门山地震带震后十年监测</h3>
+              <p>基于时序 InSAR 对龙门山断裂带震后十年进行长期形变监测，揭示震后形变时空演化规律，服务区域地震风险研判。</p>
+              <div class="case-stats">
+                <div class="case-stat"><div class="num">10</div><div class="label">年跨度</div></div>
+                <div class="case-stat"><div class="num">时序</div><div class="label">InSAR</div></div>
+                <div class="case-stat"><div class="num">断裂带</div><div class="label">监测</div></div>
+              </div>
+            </div>
+          </a>
+
         </div>
       </div>
-      </a>
+    </div>
 
-      <!-- 龙门山 -->
-      <a href="cases.html" style="text-decoration:none;color:inherit;display:contents;">
-      <div class="card case-card">
-        <div class="case-image" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);">🔬</div>
-        <div class="case-body">
-          <span class="card-tag amber" style="background:rgba(124,58,237,.1);color:#7c3aed;">地震研究</span>
-          <h3>龙门山地震带震后十年监测</h3>
-          <p>基于时序 InSAR 对龙门山断裂带震后十年进行长期形变监测，揭示震后形变时空演化规律，服务区域地震风险研判。</p>
-          <div class="case-stats">
-            <div class="case-stat"><div class="num">10</div><div class="label">年跨度</div></div>
-            <div class="case-stat"><div class="num">时序</div><div class="label">InSAR</div></div>
-            <div class="case-stat"><div class="num">断裂带</div><div class="label">监测</div></div>
-          </div>
-        </div>
-      </div>
-      </a>
-
-      <!-- ═══ 水利工程 ═══ -->
+    <!-- ═══ 水利工程 ═══ -->
+    <div class="category-block" id="cat-water">
       <div class="category-header"><h3>水利工程监测</h3><span class="badge">1 个项目</span><span class="line"></span></div>
+      <div class="slider-wrapper">
+        <div class="slider-track">
 
-      <!-- 小浪底 -->
-      <a href="cases.html" style="text-decoration:none;color:inherit;display:contents;">
-      <div class="card case-card">
-        <div class="case-image" style="background:linear-gradient(135deg,#1a5a8f,#0a3d6b);">🌊</div>
-        <div class="case-body">
-          <span class="card-tag amber">水利工程</span>
-          <h3>小浪底水电站大坝安全评估</h3>
-          <p>对小浪底水电站大坝及库区进行 InSAR 安全监测。坝体形变在 ±3 mm/yr 内，库区两岸识别出 5 处潜在不稳定斜坡。</p>
-          <div class="case-stats">
-            <div class="case-stat"><div class="num">60</div><div class="label">景 Sentinel-1</div></div>
-            <div class="case-stat"><div class="num">5</div><div class="label">不稳定斜坡</div></div>
-            <div class="case-stat"><div class="num">±3</div><div class="label">mm/yr 坝体</div></div>
-          </div>
+          <a href="cases.html" class="card case-card" style="text-decoration:none;color:inherit;">
+            <div class="case-image" style="background:linear-gradient(135deg,#1a5a8f,#0a3d6b);">🌊</div>
+            <div class="case-body">
+              <span class="card-tag amber">水利工程</span>
+              <h3>小浪底水电站大坝安全评估</h3>
+              <p>对小浪底水电站大坝及库区进行 InSAR 安全监测。坝体形变在 ±3 mm/yr 内，库区两岸识别出 5 处潜在不稳定斜坡。</p>
+              <div class="case-stats">
+                <div class="case-stat"><div class="num">60</div><div class="label">景 Sentinel-1</div></div>
+                <div class="case-stat"><div class="num">5</div><div class="label">不稳定斜坡</div></div>
+                <div class="case-stat"><div class="num">±3</div><div class="label">mm/yr 坝体</div></div>
+              </div>
+            </div>
+          </a>
+
         </div>
       </div>
-      </a>
-
-      <!-- 空位占位 -->
-      <div style="display:contents;"></div>
-
     </div>
 
     <div class="text-center" style="margin-top:3rem;">
@@ -233,8 +286,37 @@
   <div class="footer-bottom">© 2026 地微科技</div>
 </footer>
 
+<script>
+/* 滑块左右滚动 */
+function scrollSlider(catId, dir) {
+  const track = document.querySelector('#' + catId + ' .slider-track');
+  if (!track) return;
+  const cardWidth = track.querySelector('.card')?.offsetWidth || 340;
+  const gap = 32; /* 2rem */
+  const scrollAmt = (cardWidth + gap) * dir;
+  track.scrollBy({ left: scrollAmt, behavior: 'smooth' });
+}
+
+/* 箭头可见性：监听滚动事件 */
+document.querySelectorAll('.slider-wrapper').forEach(wrapper => {
+  const track = wrapper.querySelector('.slider-track');
+  const leftBtn = wrapper.querySelector('.slider-arrow.left');
+  const rightBtn = wrapper.querySelector('.slider-arrow.right');
+  if (!track || !rightBtn) return;
+
+  function toggleArrows() {
+    if (leftBtn) leftBtn.classList.toggle('hidden', track.scrollLeft <= 1);
+    if (rightBtn) rightBtn.classList.toggle('hidden', track.scrollLeft + track.clientWidth >= track.scrollWidth - 1);
+  }
+
+  track.addEventListener('scroll', toggleArrows);
+  window.addEventListener('resize', toggleArrows);
+  // Initial state
+  setTimeout(toggleArrows, 100);
+  if (leftBtn && track.scrollLeft <= 1) leftBtn.classList.add('hidden');
+});
+</script>
+
 <script src="js/main.js"></script>
 </body>
 </html>
-
-
