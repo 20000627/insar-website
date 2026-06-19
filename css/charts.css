@@ -1,0 +1,106 @@
+/* ============================================================
+   Charts & Visualization for Case Details
+   ============================================================ */
+
+.chart-container {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  margin: 2rem 0;
+  border: 1px solid rgba(0,0,0,.04);
+}
+
+.chart-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: .5rem;
+}
+
+.chart-subtitle {
+  font-size: .85rem;
+  color: var(--gray);
+  margin-bottom: 1.5rem;
+}
+
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  max-height: 400px;
+}
+
+.case-detail-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.case-detail-header .info h1 {
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: .5rem;
+}
+
+.case-detail-header .info .meta {
+  color: var(--gray);
+  font-size: .9rem;
+  margin-bottom: 1rem;
+}
+
+.case-detail-header .info p {
+  color: #555;
+  line-height: 1.8;
+}
+
+.case-detail-header .summary-card {
+  background: var(--light-gray);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.summary-item {
+  text-align: center;
+  padding: 1rem;
+  background: var(--white);
+  border-radius: var(--radius);
+}
+
+.summary-item .num {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.summary-item .label {
+  font-size: .8rem;
+  color: var(--gray);
+  margin-top: .2rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: .9rem;
+  margin-bottom: 1.5rem;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width:768px) {
+  .case-detail-header {
+    grid-template-columns: 1fr;
+  }
+  .case-detail-header .summary-card {
+    grid-template-columns: 1fr 1fr;
+  }
+}
