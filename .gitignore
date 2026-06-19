@@ -1,0 +1,5 @@
+﻿
+# Sensitive raw data (desensitized versions are in case/ instead)
+case/guangancun_ts.txt
+case/guangancun_vel.txt
+case/analysis_report.json

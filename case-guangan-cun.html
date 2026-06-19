@@ -129,17 +129,24 @@
       <div class="chartbox" id="chartTS"></div>
     </div>
 
-    <!-- Chart 2: Rate Distribution (Histogram) -->
+    <!-- Chart 2: 形变聚类 -->
+    <div class="chart-card">
+      <h3>形变模式聚类分析</h3>
+      <p class="desc">基于 K-Means 将全部监测点分为 3 类形变模式。低形变区（绿）多为负形变/稳定点，高形变区（红）持续加速下滑，中等形变区（橙）介于两者之间。</p>
+      <div class="chartbox" id="chartCluster"></div>
+    </div>
+
+    <!-- Chart 3: Rate Distribution (Histogram) -->
     <div class="chart-card">
       <h3>形变速率分布</h3>
       <p class="desc">全部 5,940 个监测点平均形变速率的频率分布。正值表示沿视线向远离卫星（沉降/下滑），负值表示指向卫星。</p>
       <div class="chartbox" id="chartHist"></div>
     </div>
 
-    <!-- Chart 3: Spatial Scatter -->
+    <!-- Chart 4: Spatial Scatter (desensitized) -->
     <div class="chart-card">
       <h3>形变空间分布</h3>
-      <p class="desc">监测点平面分布图，颜色表示累计形变量（红色为形变较大区域，蓝色为形变较小或负形变区域）</p>
+      <p class="desc">监测点平面分布图，颜色表示累计形变量（红 = 高形变，蓝 = 低/负形变）。坐标已做脱敏处理。</p>
       <div class="chartbox" id="chartScatter"></div>
     </div>
 
@@ -242,7 +249,43 @@ fetch(dataUrl)
       series: series,
     });
 
-    // ── Chart 2: Histogram ──
+    // ── Chart 2: Cluster Time Series ──
+    const clusterChart = echarts.init(document.getElementById('chartCluster'));
+    const clusterSeries = d.cluster_ts.map(c => ({
+      name: c.name + ' (' + c.count + '点, ' + c.mean + 'mm)',
+      type: 'line',
+      data: c.data,
+      smooth: true, symbol: 'none',
+      lineStyle: { width: 3 },
+      color: c.color,
+      areaStyle: { opacity: 0.08 },
+    }));
+    clusterChart.setOption({
+      tooltip: {
+        trigger: 'axis',
+        valueFormatter: v => v.toFixed(1) + ' mm',
+      },
+      legend: { top: 0, textStyle: { fontSize: 11 } },
+      grid: { left: 55, right: 20, top: 50, bottom: 40 },
+      xAxis: {
+        type: 'category', data: dates,
+        axisLabel: { rotate: 45, fontSize: 10 },
+        boundaryGap: false,
+      },
+      yAxis: {
+        type: 'value',
+        name: '累计形变量 (mm)',
+        nameTextStyle: { fontSize: 11 },
+        splitLine: { lineStyle: { color: 'rgba(0,0,0,.06)' } },
+      },
+      dataZoom: [
+        { type: 'inside', start: 0, end: 100 },
+        { type: 'slider', start: 0, end: 100, height: 20, bottom: 0 },
+      ],
+      series: clusterSeries,
+    });
+
+    // ── Chart 3: Histogram ──
     const histChart = echarts.init(document.getElementById('chartHist'));
     const hist = d.histogram;
     const histColors = hist.labels.map((_, i) => {
@@ -323,6 +366,7 @@ fetch(dataUrl)
     // Responsive
     window.addEventListener('resize', () => {
       tsChart.resize();
+      clusterChart.resize();
       histChart.resize();
       scatterChart.resize();
     });
