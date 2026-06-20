@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
 <style>
-/* 详情页专用样式 */
 .case-hero {
   background: linear-gradient(135deg, var(--primary) 0%, #0d2d4f 100%);
   color: var(--white);
@@ -35,7 +34,6 @@
 .stats-bar .num { font-size: 1.6rem; font-weight: 800; color: var(--primary); }
 .stats-bar .label { font-size: .78rem; color: var(--gray); margin-top: .2rem; }
 
-/* 图表卡片 */
 .chart-card {
   background: var(--white);
   border: 1px solid rgba(0,0,0,.06);
@@ -44,26 +42,14 @@
   margin-bottom: 2rem;
   box-shadow: 0 2px 12px rgba(0,0,0,.04);
 }
-.chart-card h3 {
-  font-size: 1rem; font-weight: 600; color: var(--primary);
-  margin-bottom: .25rem;
-}
-.chart-card .desc {
-  font-size: .82rem; color: var(--gray);
-  margin-bottom: 1rem;
-}
+.chart-card h3 { font-size: 1rem; font-weight: 600; color: var(--primary); margin-bottom: .25rem; }
+.chart-card .desc { font-size: .82rem; color: var(--gray); margin-bottom: 1rem; }
 .chart-card .chartbox { width: 100%; height: 400px; }
 
-/* 数据表 */
-.data-table {
-  width:100%; border-collapse:collapse; font-size:.85rem;
-}
-.data-table td {
-  padding:.5rem .8rem; border-bottom:1px solid #f0f0f0;
-}
+.data-table { width:100%; border-collapse:collapse; font-size:.85rem; }
+.data-table td { padding:.5rem .8rem; border-bottom:1px solid #f0f0f0; }
 .data-table td:first-child { color:var(--gray); width:140px; }
 
-/* 分析结论卡片 */
 .analysis-card {
   background: linear-gradient(135deg,#f8fafc,#f0f4f8);
   border: 1px solid rgba(10,61,107,.12);
@@ -71,30 +57,26 @@
   padding: 1.8rem;
   margin-bottom: 2rem;
 }
-.analysis-card h3 {
-  font-size: 1.05rem; font-weight: 700; color: var(--primary);
-  margin-bottom: 1rem; display: flex; align-items: center; gap: .5rem;
-}
-.analysis-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
-  gap: 1.2rem;
-}
+.analysis-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: .5rem; }
+.analysis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 1.2rem; }
 .analysis-item {
-  background: var(--white);
-  border-radius: calc(var(--radius) - 4px);
-  padding: 1rem 1.2rem;
-  border-left: 3px solid var(--accent);
+  background: var(--white); border-radius: calc(var(--radius) - 4px);
+  padding: 1rem 1.2rem; border-left: 3px solid var(--accent);
 }
 .analysis-item h4 { font-size: .9rem; font-weight: 600; margin-bottom: .3rem; }
 .analysis-item p, .analysis-item ul { font-size: .82rem; color: #444; margin: 0; line-height: 1.6; }
 .analysis-item ul { padding-left: 1rem; }
-.analysis-item.danger { border-left-color: #dc2626; }
-.analysis-item.warning { border-left-color: #f59e0b; }
-.analysis-item.success { border-left-color: #10b981; }
+.analysis-item.los-pos { border-left-color: #dc2626; }
+.analysis-item.los-neg { border-left-color: #0571b0; }
+.analysis-item.stable { border-left-color: #10b981; }
 
-.back-link-area {
-  max-width: 1100px; margin: 1rem auto 0; padding: 0 1.5rem;
-}
+.legend-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:4px; }
+.legend-dot.red { background:#dc2626; }
+.legend-dot.blue { background:#0571b0; }
+.legend-dot.green { background:#10b981; }
+
+.back-link-area { max-width: 1100px; margin: 1rem auto 0; padding: 0 1.5rem; }
+.los-note { font-size:.78rem; color:#888; margin-top:.5rem; line-height:1.5; }
 @media(max-width:768px) {
   .case-hero h1 { font-size: 1.6rem; }
   .stats-bar { grid-template-columns: repeat(3,1fr); padding: 1rem; }
@@ -117,7 +99,6 @@
   </ul>
 </nav>
 
-<!-- Hero -->
 <div class="case-hero">
   <div class="tags">
     <span>地质灾害</span>
@@ -129,12 +110,11 @@
   <p class="subtitle">基于 64 景 Sentinel-1 影像的 PS-InSAR 形变分析 · 2017–2019</p>
 </div>
 
-<!-- Stats Bar -->
 <div class="stats-bar">
   <div class="item"><div class="num" id="statPts">—</div><div class="label">监测点数</div></div>
   <div class="item"><div class="num" id="statDates">—</div><div class="label">SAR 影像</div></div>
-  <div class="item"><div class="num" id="statMax">—</div><div class="label">最大形变 (mm)</div></div>
-  <div class="item"><div class="num" id="statMin">—</div><div class="label">最小形变 (mm)</div></div>
+  <div class="item"><div class="num" id="statMax">—</div><div class="label">正LOS最大 (mm)</div></div>
+  <div class="item"><div class="num" id="statMin">—</div><div class="label">负LOS最大 (mm)</div></div>
   <div class="item"><div class="num" id="statMean">—</div><div class="label">平均形变 (mm)</div></div>
   <div class="item"><div class="num" id="statArea">—</div><div class="label">覆盖面积 (km²)</div></div>
 </div>
@@ -146,61 +126,61 @@
       <a href="cases.html" style="display:inline-flex;align-items:center;gap:.4rem;color:var(--accent);text-decoration:none;font-size:.85rem;margin-bottom:1rem;">← 返回案例列表</a>
     </div>
 
-    <!-- Chart 1: Time Series -->
+    <!-- Chart 1: Clustered Time Series -->
     <div class="chart-card">
-      <h3>形变时间序列曲线</h3>
-      <p class="desc">展示不同形变量级监测点的累计形变随时间演化趋势。选取了累积形变最大的 5 个点以及 P25、P50、P75 分位处的代表点，拖拽底部滑条可查看任意时段细节。</p>
-      <div class="chartbox" id="chartTS"></div>
-    </div>
-
-    <!-- Chart 2: 形变聚类 -->
-    <div class="chart-card">
-      <h3>形变模式聚类分析</h3>
-      <p class="desc">基于 K-Means 将全部 5,940 个监测点按形变演化特征分为 3 类，展示各类中心形变曲线。高形变区（红）持续加速下滑，是重点防范区域。</p>
+      <h3>LOS方向形变时间序列 — 三聚类中心</h3>
+      <p class="desc">基于 K-Means 将 5,940 个监测点按累计形变量分为三类。<span class="legend-dot red"></span>正LOS形变（背离卫星=下滑/沉降）|<span class="legend-dot green"></span>近零形变（基本稳定）|<span class="legend-dot blue"></span>负LOS形变（指向卫星=抬升/逆坡）</p>
       <div class="chartbox" id="chartCluster"></div>
+      <div class="los-note">⚠ LOS向形变说明：正值表示地表沿卫星视线方向远离卫星（典型滑坡下滑或地面沉降），负值表示指向卫星运动（局部抬升或逆坡运动）。不代表"形变量小"。</div>
     </div>
 
-    <!-- Chart 3: Rate Distribution (Histogram) -->
+    <!-- Chart 2: Top5 Time Series (POS & NEG) -->
+    <div class="chart-card">
+      <h3>极端形变点时间序列</h3>
+      <p class="desc">展示正LOS方向（背离卫星）与负LOS方向（指向卫星）各自的 TOP5 形变点演化曲线。正方向最大 160.6mm，负方向最大 -144.0mm。</p>
+      <div class="chartbox" id="chartTop5"></div>
+    </div>
+
+    <!-- Chart 3: Rate Distribution -->
     <div class="chart-card">
       <h3>形变速率分布</h3>
-      <p class="desc">全部 5,940 个监测点平均形变速率的频率分布。正值表示沿视线向远离卫星（典型沉降/下滑），负值表示指向卫星（局部抬升或逆坡运动）。</p>
+      <p class="desc">全部 5,940 个监测点年平均形变速率的频率分布。<span class="legend-dot red"></span>正值（背离卫星/下滑）<span class="legend-dot blue"></span>负值（指向卫星/抬升）</p>
       <div class="chartbox" id="chartHist"></div>
     </div>
 
-    <!-- Chart 4: Spatial Scatter (desensitized) -->
+    <!-- Chart 4: Spatial Scatter -->
     <div class="chart-card">
       <h3>形变空间分布</h3>
-      <p class="desc">监测点平面分布图，颜色映射累计形变量级（红色 = 高形变，蓝色 = 低/负形变）。坐标已做脱敏处理，保留空间分布特征。</p>
+      <p class="desc">监测点平面分布图，颜色映射累计形变量。<span class="legend-dot red"></span>正LOS（背离卫星/下滑）|<span class="legend-dot blue"></span>负LOS（指向卫星/抬升）。坐标已做脱敏处理。</p>
       <div class="chartbox" id="chartScatter"></div>
     </div>
 
-    <!-- ═══ 分析与结论 ═══ -->
+    <!-- Analysis & Conclusion -->
     <div class="analysis-card">
-      <h3>📋 形变趋势分析与风险评估</h3>
+      <h3>📋 形变分析结论与风险评判</h3>
 
       <div class="analysis-grid">
-        <div class="analysis-item danger">
-          <h4>🔴 高形变区 — 重点关注</h4>
+        <div class="analysis-item los-pos">
+          <h4><span class="legend-dot red"></span>正LOS形变区（背离卫星方向）</h4>
           <p>
-            <strong>占比 24.6%</strong>（1,464 点），平均累积形变 <strong>62.9 mm</strong>，范围 45.1~160.6 mm。<br>
-            <span id="analysis-cluster-high"></span>
-            该区域点密度集中，形变曲线呈持续加速趋势，<span id="analysis-accel-high"></span>的点处于加速状态，需优先纳入地质灾害隐患点台账并加密监测频次。
+            <strong>1,464 个点（24.6%）</strong>，平均 <strong>+62.9 mm</strong>，最大 <strong>+160.6 mm</strong>。<br>
+            该区域监测点表现为持续远离卫星的运动趋势，即典型的下滑/沉降特征。从时间曲线看，<strong>81.7% 的点加速变形</strong>，后半段平均增速较前半段增加显著。该区域应优先纳入地质灾害隐患点台账，加密监测频次。
           </p>
         </div>
 
-        <div class="analysis-item warning">
-          <h4>🟡 中等形变区 — 持续关注</h4>
+        <div class="analysis-item stable">
+          <h4><span class="legend-dot green"></span>稳定区（近零形变）</h4>
           <p>
-            <strong>占比 53.8%</strong>（3,197 点），平均累积形变 <strong>27.2 mm</strong>，范围 8.5~45.0 mm。<br>
-            作为主体变形区域，覆盖范围广、点密度高。部分点位形变有明显季节性波动——<span id="analysis-seasonal"></span>，可能与降雨入渗导致的孔隙水压力变化有关，建议结合降雨数据进一步分析。
+            <strong>3,197 个点（53.8%）</strong>，平均 <strong>+27.2 mm</strong>，范围 8.5~45.0 mm。<br>
+            占监测面积半数以上，整体形变幅度较小，地面相对稳定。但值得注意的是，雨季（4-9月）平均形变量 <span id="seasonWet"></span> 高于旱季 <span id="seasonDry"></span>，差异约 <span id="seasonDiff"></span>，可能存在降雨引发的季节性波动。
           </p>
         </div>
 
-        <div class="analysis-item success">
-          <h4>🟢 低形变区 — 基本稳定</h4>
+        <div class="analysis-item los-neg">
+          <h4><span class="legend-dot blue"></span>负LOS形变区（指向卫星方向）</h4>
           <p>
-            <strong>占比 21.5%</strong>（1,279 点），平均累积形变 <strong>-10.2 mm</strong>，范围 -144.1~8.5 mm。<br>
-            该区域以负形变（指向卫星方向）和微量形变为主，地面基本稳定或存在局部轻微抬升，岩土力学性质相对完好，短期内失稳风险较低。
+            <strong>1,279 个点（21.5%）</strong>，平均 <strong>-10.2 mm</strong>，最大负方向 <strong>-144.0 mm</strong>。<br>
+            该区域表现为指向卫星方向的运动，可能为局部抬升或逆坡方向的蠕滑。虽非典型"下滑"，但 <strong>-144 mm 的幅度不可忽视</strong>，表明该区域同样存在明显的地表运动，需结合地形和地质条件进一步分析其机制。
           </p>
         </div>
       </div>
@@ -209,16 +189,16 @@
         <h3 style="font-size:.95rem;font-weight:600;color:var(--primary);margin-bottom:.8rem;">🎯 解决方案建议</h3>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;">
           <div style="background:var(--white);border-radius:calc(var(--radius)-4px);padding:1rem 1.2rem;">
-            <strong style="color:var(--accent);">① 加密监测</strong>
-            <p style="font-size:.82rem;color:#444;margin:.4rem 0 0;line-height:1.6;">对高形变区实施月尺度高频监测，引入更高分辨率 SAR 数据（如 TerraSAR-X、ICEYE）提升空间采样密度和细节识别能力。</p>
+            <strong style="color:var(--accent);">① 加密监测 — 正LOS区优先</strong>
+            <p style="font-size:.82rem;color:#444;margin:.4rem 0 0;line-height:1.6;">对正LOS形变区实施月尺度高频监测，引入 TerraSAR-X / ICEYE 等高分辨率 SAR 数据提升空间采样密度，获取更精细的形变场细节。</p>
           </div>
           <div style="background:var(--white);border-radius:calc(var(--radius)-4px);padding:1rem 1.2rem;">
-            <strong style="color:var(--accent);">② 多源数据融合</strong>
-            <p style="font-size:.82rem;color:#444;margin:.4rem 0 0;line-height:1.6;">融合 Sentinel-1 升/降轨数据分解真实三维形变场，结合光学遥感（滑坡体裂缝识别）和 GNSS 地面站校验，构建空天地一体化监测体系。</p>
+            <strong style="color:var(--accent);">② 三维形变分解 — 解析真实运动</strong>
+            <p style="font-size:.82rem;color:#444;margin:.4rem 0 0;line-height:1.6;">融合升轨/降轨 Sentinel-1 数据分解真实三维形变分量，区分垂直沉降与水平运动，配合光学遥感识别地表裂缝与形变边界。</p>
           </div>
           <div style="background:var(--white);border-radius:calc(var(--radius)-4px);padding:1rem 1.2rem;">
-            <strong style="color:var(--accent);">③ 智能预警</strong>
-            <p style="font-size:.82rem;color:#444;margin:.4rem 0 0;line-height:1.6;">基于深度学习的形变趋势预测模型，结合降雨、地下水等外部因子，实现分级预警推送，为防灾减灾争取宝贵时间。</p>
+            <strong style="color:var(--accent);">③ 多因子预警模型</strong>
+            <p style="font-size:.82rem;color:#444;margin:.4rem 0 0;line-height:1.6;">结合降雨量、地下水位、地形坡度等外部驱动因子，构建深度学习形变趋势预测模型，实现 3 级风险预警推送。</p>
           </div>
         </div>
       </div>
@@ -230,15 +210,16 @@
       <table class="data-table">
         <tr><td>项目名称</td><td>广安村滑坡时序 InSAR 监测</td></tr>
         <tr><td>数据源</td><td>Sentinel-1 IW SLC</td></tr>
-        <tr><td>影像数量</td><td id="metaDates">64 景</td></tr>
+        <tr><td>影像数量</td><td>64 景</td></tr>
         <tr><td>时间跨度</td><td>2017.10 – 2019.11</td></tr>
         <tr><td>处理方法</td><td>PS-InSAR（永久散射体时序分析）</td></tr>
         <tr><td>监测精度</td><td>亚毫米级</td></tr>
         <tr><td>监测点数</td><td id="metaPts">5,940</td></tr>
         <tr><td>空间分辨率</td><td>平均 458 点/km²</td></tr>
         <tr><td>覆盖范围</td><td>广安村及周边区域 (~13 km²)</td></tr>
-        <tr><td>季节性差异</td><td id="metaSeasonal">雨季形变大于旱季</td></tr>
-        <tr><td>趋势判定</td><td id="metaTrend">81.7% 监测点加速变形</td></tr>
+        <tr><td>正LOS最大形变</td><td>+160.6 mm（点#246）</td></tr>
+        <tr><td>负LOS最大形变</td><td>-144.0 mm（点#1249）</td></tr>
+        <tr><td>形变趋势</td><td id="metaTrend">81.7% 点加速背离卫星方向</td></tr>
       </table>
     </div>
 
@@ -257,237 +238,124 @@
 
 <script>
 const dataUrl = 'case/guangancun_data.json';
-
 fetch(dataUrl)
   .then(r => r.json())
   .then(d => {
-    // ── Update Stats ──
     const cs = d.stats.cumulative;
     document.getElementById('statPts').textContent = d.n_points.toLocaleString();
     document.getElementById('statDates').textContent = d.dates.length;
-    document.getElementById('statMax').textContent = cs.max;
+    document.getElementById('statMax').textContent = '+' + cs.max;
     document.getElementById('statMin').textContent = cs.min;
     document.getElementById('statMean').textContent = cs.mean;
     const lonSpan = (d.coords.lon_max - d.coords.lon_min) * 111000 * Math.cos(31.555 * Math.PI / 180);
     const latSpan = (d.coords.lat_max - d.coords.lat_min) * 111000;
     document.getElementById('statArea').textContent = ((lonSpan * latSpan) / 1e6).toFixed(2);
-
-    // ── Update analysis text from cluster data ──
-    if (d.cluster_ts && d.cluster_ts.length === 3) {
-      document.getElementById('analysis-cluster-high').textContent =
-        `高形变区中心曲线均值 ${d.cluster_ts[2].mean} mm，涵盖 ${d.cluster_ts[2].count} 个监测点。`;
-      // Seasonal / trend data from the analysis report
-      // We approximate from the data itself
-      const firstHalf = Math.floor(d.dates.length / 2);
-      const lastHalf = d.dates.length - firstHalf;
-      // Cluster 2 is the high-deformation cluster
-      const highClusterData = d.cluster_ts[2].data;
-      if (highClusterData) {
-        const firstAvg = highClusterData.slice(0, firstHalf).reduce((a,b) => a+b, 0) / firstHalf;
-        const lastAvg = highClusterData.slice(firstHalf).reduce((a,b) => a+b, 0) / lastHalf;
-        const diff = lastAvg - firstAvg;
-        document.getElementById('analysis-accel-high').textContent =
-          `后半段均值较前半段增加 ${diff >= 0 ? '+' : ''}${diff.toFixed(1)} mm`;
-      }
-    }
-
-    // Seasonal: compute wet/dry from all point averages
-    const wetMonths = [4,5,6,7,8,9];
     const dates = d.dates;
-    let wetSum = 0, drySum = 0, wetN = 0, dryN = 0;
-    // Use cluster 1 (medium) data as representative
-    const midData = d.cluster_ts?.[1]?.data || d.representative_ts?.[1]?.data || [];
-    if (midData.length) {
-      midData.forEach((v, i) => {
-        const m = parseInt(dates[i]?.split('-')[1]);
-        if (wetMonths.includes(m)) { wetSum += v; wetN++; }
-        else { drySum += v; dryN++; }
-      });
-      const wetAvg = wetN ? wetSum / wetN : 0;
-      const dryAvg = dryN ? drySum / dryN : 0;
-      const diff = wetAvg - dryAvg;
-      document.getElementById('analysis-seasonal').textContent =
-        `雨季（4-9月）平均累计形变 ${wetAvg.toFixed(1)} mm，旱季（10-3月）${dryAvg.toFixed(1)} mm，差异 ${diff.toFixed(1)} mm`;
-      document.getElementById('metaSeasonal').textContent =
-        `雨季形变 ${wetAvg.toFixed(1)} mm > 旱季 ${dryAvg.toFixed(1)} mm（差 ${diff.toFixed(1)} mm）`;
-      document.getElementById('metaTrend').textContent =
-        `81.7% 监测点处于加速变形状态（后半段 > 前半段 5mm 以上）`;
+
+    const ad = d.analysis || {};
+    document.getElementById('metaTrend').textContent = ad.accelerating_pct + '% 点背离卫星方向加速';
+    if (ad.seasonal) {
+      document.getElementById('seasonWet').textContent = ad.seasonal.wet_avg + 'mm';
+      document.getElementById('seasonDry').textContent = ad.seasonal.dry_avg + 'mm';
+      document.getElementById('seasonDiff').textContent = ad.seasonal.diff + 'mm';
     }
 
+    // Meta points breakdown
+    const cts = d.cluster_ts || [];
     document.getElementById('metaPts').textContent =
-      d.n_points.toLocaleString() + ' 点（低形变: ' + (d.cluster_ts?.[0]?.count || '—') +
-      ', 中: ' + (d.cluster_ts?.[1]?.count || '—') +
-      ', 高: ' + (d.cluster_ts?.[2]?.count || '—') + '）';
+      d.n_points.toLocaleString() + ' 点（正LOS: ' +
+      (cts.find(c => c.name.includes('正LOS'))?.count || '—') +
+      ', 稳定: ' + (cts.find(c => c.name.includes('稳定'))?.count || '—') +
+      ', 负LOS: ' + (cts.find(c => c.name.includes('负LOS'))?.count || '—') + '）';
 
-    // ── Chart 1: Time Series ──
-    const tsChart = echarts.init(document.getElementById('chartTS'));
-    const series = [];
-    const colors = ['#10b981', '#0a3d6b', '#f59e0b'];
-    d.representative_ts.forEach((p, i) => {
-      series.push({
-        name: p.label, type: 'line',
-        data: p.data, smooth: true, symbol: 'none',
-        lineStyle: { width: 2, type: 'dashed' },
-        color: colors[i],
-      });
-    });
-    const topColors = ['#dc2626', '#f97316', '#8b5cf6', '#0891b2', '#be123c'];
-    d.top5_ts.forEach((p, i) => {
-      series.push({
-        name: p.label, type: 'line',
-        data: p.data, smooth: true, symbol: 'none',
-        lineStyle: { width: 2 },
-        color: topColors[i % topColors.length],
-      });
-    });
-
-    tsChart.setOption({
-      tooltip: { trigger: 'axis', valueFormatter: v => v?.toFixed(1) + ' mm' },
-      legend: { type: 'scroll', top: 0, textStyle: { fontSize: 11 }, pageIconSize: 10 },
-      grid: { left: 60, right: 24, top: 55, bottom: 55 },
-      xAxis: {
-        type: 'category', data: dates,
-        axisLabel: { rotate: 45, fontSize: 11 },
-        boundaryGap: false,
-      },
-      yAxis: {
-        type: 'value', name: '累计形变量 (mm)',
-        nameTextStyle: { fontSize: 12, padding: [0, 0, 0, 0] },
-        splitLine: { lineStyle: { color: 'rgba(0,0,0,.06)' } },
-      },
-      dataZoom: [
-        { type: 'inside', start: 0, end: 100 },
-        { type: 'slider', start: 0, end: 100, height: 24, bottom: 8 },
-      ],
-      series: series,
-    });
-
-    // ── Chart 2: Cluster ──
+    // ═══ Chart 1: Cluster time series ═══
     const clusterChart = echarts.init(document.getElementById('chartCluster'));
-    const clusterSeries = (d.cluster_ts || []).map(c => ({
+    const clusterSeries = (cts || []).map(c => ({
       name: c.name + ' (' + c.count + '点, ' + c.mean + 'mm)',
       type: 'line', data: c.data, smooth: true, symbol: 'none',
       lineStyle: { width: 3 }, color: c.color,
       areaStyle: { opacity: 0.08 },
     }));
     clusterChart.setOption({
-      tooltip: { trigger: 'axis', valueFormatter: v => v?.toFixed(1) + ' mm' },
+      tooltip: { trigger: 'axis', valueFormatter: v => (v != null ? v.toFixed(1) + ' mm' : '') },
       legend: { top: 0, textStyle: { fontSize: 11 } },
-      grid: { left: 60, right: 24, top: 50, bottom: 55 },
-      xAxis: {
-        type: 'category', data: dates,
-        axisLabel: { rotate: 45, fontSize: 11 },
-        boundaryGap: false,
-      },
-      yAxis: {
-        type: 'value', name: '累计形变量 (mm)',
-        nameTextStyle: { fontSize: 12 },
-        splitLine: { lineStyle: { color: 'rgba(0,0,0,.06)' } },
-      },
-      dataZoom: [
-        { type: 'inside', start: 0, end: 100 },
-        { type: 'slider', start: 0, end: 100, height: 24, bottom: 8 },
-      ],
+      grid: { left: 65, right: 24, top: 55, bottom: 55 },
+      xAxis: { type: 'category', data: dates, axisLabel: { rotate: 45, fontSize: 11 }, boundaryGap: false },
+      yAxis: { type: 'value', name: '累计形变量 (mm)', nameTextStyle: { fontSize: 12 }, splitLine: { lineStyle: { color: 'rgba(0,0,0,.06)' } } },
+      dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', start: 0, end: 100, height: 24, bottom: 8 }],
       series: clusterSeries,
     });
 
-    // ── Chart 3: Histogram (FIX: more bottom margin for labels) ──
+    // ═══ Chart 2: Top5 POS + NEG ═══
+    const top5Chart = echarts.init(document.getElementById('chartTop5'));
+    const posSeries = (d.top5_pos_los || []).map((p, i) => ({
+      name: p.label, type: 'line', data: p.data, smooth: true, symbol: 'none',
+      lineStyle: { width: 2 }, color: ['#dc2626','#f97316','#e11d48','#be123c','#881337'][i],
+    }));
+    const negSeries = (d.top5_neg_los || []).map((p, i) => ({
+      name: p.label, type: 'line', data: p.data, smooth: true, symbol: 'none',
+      lineStyle: { width: 2, type: 'dashed' }, color: ['#0571b0','#3b82f6','#1d4ed8','#1e3a5f','#0f172a'][i],
+    }));
+    top5Chart.setOption({
+      tooltip: { trigger: 'axis', valueFormatter: v => (v != null ? v.toFixed(1) + ' mm' : '') },
+      legend: { type: 'scroll', top: 0, textStyle: { fontSize: 10 }, pageIconSize: 10 },
+      grid: { left: 65, right: 24, top: 55, bottom: 55 },
+      xAxis: { type: 'category', data: dates, axisLabel: { rotate: 45, fontSize: 11 }, boundaryGap: false },
+      yAxis: { type: 'value', name: '累计形变量 (mm)', nameTextStyle: { fontSize: 12 }, splitLine: { lineStyle: { color: 'rgba(0,0,0,.06)' } } },
+      dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', start: 0, end: 100, height: 24, bottom: 8 }],
+      series: [...negSeries, ...posSeries],
+    });
+
+    // ═══ Chart 3: Histogram ═══
     const histChart = echarts.init(document.getElementById('chartHist'));
     const hist = d.histogram;
-    const histColors = hist.labels.map((_, i) => {
+    const hc = hist.labels.map((_, i) => {
       const mid = (i + 0.5) / hist.labels.length;
-      return echarts.color.lerp(mid, ['#10b981', '#f59e0b', '#dc2626']);
+      return echarts.color.lerp(mid, ['#0571b0','#f7f7f7','#dc2626']);
     });
     histChart.setOption({
-      tooltip: { trigger: 'axis', formatter: p => {
-        if (!p?.length) return '';
-        return `<b>${p[0].axisValue}</b><br/>监测点数量: <b>${p[0].data}</b>`;
-      }},
+      tooltip: { trigger: 'axis', formatter: p => (p?.length ? `<b>${p[0].axisValue}</b><br/>监测点: <b>${p[0].data}</b>` : '') },
       grid: { left: 70, right: 30, top: 25, bottom: 70 },
-      xAxis: {
-        type: 'category', data: hist.labels,
-        axisLabel: { rotate: 45, fontSize: 11, margin: 8 },
-        name: '形变速率 (mm/yr)', nameLocation: 'middle',
-        nameTextStyle: { fontSize: 12, padding: [30, 0, 0, 0] },
-      },
-      yAxis: {
-        type: 'value', name: '监测点数量',
-        nameTextStyle: { fontSize: 12, padding: [0, 40, 0, 0] },
-        splitLine: { lineStyle: { color: 'rgba(0,0,0,.06)' } },
-      },
-      series: [{
-        type: 'bar', data: hist.values,
-        barMaxWidth: 40,
-        itemStyle: { color: p => histColors[p.dataIndex], borderRadius: [4,4,0,0] },
-      }],
+      xAxis: { type: 'category', data: hist.labels, axisLabel: { rotate: 45, fontSize: 11, margin: 8 },
+               name: '形变速率 (mm/yr)', nameLocation: 'middle', nameTextStyle: { fontSize: 12, padding: [30,0,0,0] } },
+      yAxis: { type: 'value', name: '监测点数量', nameTextStyle: { fontSize: 12, padding: [0,40,0,0] },
+               splitLine: { lineStyle: { color: 'rgba(0,0,0,.06)' } } },
+      series: [{ type: 'bar', data: hist.values, barMaxWidth: 40, itemStyle: { color: p => hc[p.dataIndex], borderRadius: [4,4,0,0] } }],
     });
 
-    // ── Chart 4: Spatial Scatter (FIX: more margins) ──
+    // ═══ Chart 4: Spatial Scatter ═══
     const scatterChart = echarts.init(document.getElementById('chartScatter'));
-    const pts = d.spatial;
-    const scatterData = pts.map(p => [p.lon, p.lat, p.avg]);
-    const minDef = cs.min;
-    const maxDef = cs.max;
-
+    const scatterData = d.spatial.map(p => [p.lon, p.lat, p.avg]);
     scatterChart.setOption({
-      tooltip: {
-        formatter: p => {
-          if (!p?.value) return '';
-          return `<b>监测点 #${p.dataIndex}</b><br/>
-            累计形变: <b>${p.value[2].toFixed(1)} mm</b>`;
-        },
-      },
+      tooltip: { formatter: p => p?.value ? `<b>监测点</b><br/>累计形变: <b>${p.value[2].toFixed(1)} mm</b>` : '' },
       grid: { left: 70, right: 100, top: 25, bottom: 65 },
-      xAxis: {
-        type: 'value', name: '经度',
-        nameTextStyle: { fontSize: 12, padding: [12, 0, 0, 0] },
-        splitLine: { show: false },
-        axisLabel: { fontSize: 11 },
-        min: d.coords.lon_min - .002,
-        max: d.coords.lon_max + .002,
-      },
-      yAxis: {
-        type: 'value', name: '纬度',
-        nameTextStyle: { fontSize: 12 },
-        splitLine: { show: false },
-        axisLabel: { fontSize: 11 },
-        min: d.coords.lat_min - .002,
-        max: d.coords.lat_max + .002,
-      },
+      xAxis: { type: 'value', name: '经度', nameTextStyle: { fontSize: 12, padding: [12,0,0,0] },
+               splitLine: { show: false }, axisLabel: { fontSize: 11 },
+               min: d.coords.lon_min - .002, max: d.coords.lon_max + .002 },
+      yAxis: { type: 'value', name: '纬度', nameTextStyle: { fontSize: 12 }, splitLine: { show: false },
+               axisLabel: { fontSize: 11 },
+               min: d.coords.lat_min - .002, max: d.coords.lat_max + .002 },
       visualMap: {
-        min: minDef, max: maxDef,
-        dimension: 2,
+        min: cs.min, max: cs.max, dimension: 2,
         inRange: { color: ['#0571b0','#92c5de','#f7f7f7','#f4a582','#ca0020'] },
-        text: ['高形变', '低形变'],
-        textStyle: { fontSize: 11 },
-        hoverLink: true,
-        right: 10, top: 10,
-        itemWidth: 14, itemHeight: 100,
+        text: ['正LOS (背离卫星)', '负LOS (指向卫星)'],
+        textStyle: { fontSize: 11 }, hoverLink: true,
+        right: 10, top: 10, itemWidth: 14, itemHeight: 100,
       },
-      series: [{
-        type: 'scatter',
-        data: scatterData,
-        symbolSize: 8,
-        encode: { x: 0, y: 1 },
-        itemStyle: { opacity: 0.65 },
-      }],
+      series: [{ type: 'scatter', data: scatterData, symbolSize: 8, encode: { x: 0, y: 1 }, itemStyle: { opacity: 0.65 } }],
     });
 
-    // Responsive
     window.addEventListener('resize', () => {
-      tsChart.resize();
-      clusterChart.resize();
-      histChart.resize();
-      scatterChart.resize();
+      clusterChart.resize(); top5Chart.resize();
+      histChart.resize(); scatterChart.resize();
     });
   })
   .catch(e => {
     document.querySelectorAll('.chartbox').forEach(el => {
-      el.innerHTML = '<p style="color:var(--gray);text-align:center;padding-top:100px;">⚠ 数据加载失败，请确认 guangancun_data.json 存在</p>';
+      el.innerHTML = '<p style="color:var(--gray);text-align:center;padding-top:100px;">⚠ 数据加载失败</p>';
     });
     console.error(e);
   });
 </script>
-
 </body>
 </html>
