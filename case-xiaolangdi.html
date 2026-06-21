@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小浪底水电站时序形变监测 — 地微科技</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/charts.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+.hero-banner { background:linear-gradient(135deg,#1a5a8f,#0a3d6b); color:#fff; padding:4rem 0 3rem; }
+.hero-banner h1 { font-size:2rem; font-weight:700; margin-bottom:.5rem; }
+.hero-banner .subtitle { opacity:.85; font-size:1.05rem; }
+.param-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1.5rem; margin:2rem 0; }
+.param-card { text-align:center; padding:1rem; background:var(--light-gray); border-radius:12px; }
+.param-card .val { font-size:1.4rem; font-weight:700; color:var(--primary); }
+.param-card .lbl { font-size:.8rem; color:var(--gray); margin-top:.2rem; }
+.stats-table { width:100%; border-collapse:collapse; margin:1.5rem 0; }
+.stats-table th { text-align:left; padding:.7rem .5rem; background:var(--light-gray); font-weight:600; }
+.stats-table td { padding:.7rem .5rem; border-bottom:1px solid var(--light-gray); }
+.highlight { background:rgba(26,90,143,.06); border-left:3px solid #1a5a8f; padding:1.2rem 1.5rem; border-radius:0 8px 8px 0; margin:1.5rem 0; }
+.img-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin:1.5rem 0; }
+@media(max-width:768px){ .img-grid { grid-template-columns:1fr; } }
+.img-card { background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+.img-card img { width:100%; display:block; }
+.img-card .caption { padding:.7rem; font-size:.82rem; color:var(--gray); text-align:center; }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="logo">
+    <svg viewBox="0 0 32 32" fill="none" width="32" height="32"><circle cx="16" cy="16" r="14" stroke="#0a3d6b" stroke-width="2"/><path d="M8 20 L16 8 L24 20" stroke="#00a8cc" stroke-width="2" stroke-linecap="round"/><path d="M12 18 L16 12 L20 18" stroke="#0a3d6b" stroke-width="1.5"/></svg>地微科技
+  </a>
+  <div class="mobile-toggle">☰</div>
+  <ul class="nav-links">
+    <li><a href="index.html">首页</a></li><li><a href="solutions.html">解决方案</a></li>
+    <li><a href="cases.html" class="active">典型案例</a></li><li><a href="about.html">关于我们</a></li>
+  </ul>
+</nav>
+
+<div class="hero-banner">
+  <div class="container">
+    <h1>小浪底水电站大坝及库区时序形变监测</h1>
+    <p class="subtitle">2025年春季 | 3 景 Sentinel-1A SBAS 时序分析</p>
+  </div>
+</div>
+
+<section class="section"><div class="container">
+  <div class="param-grid">
+    <div class="param-card"><div class="val">3</div><div class="lbl">景影像</div></div>
+    <div class="param-card"><div class="val">3</div><div class="lbl">干涉对</div></div>
+    <div class="param-card"><div class="val">-21</div><div class="lbl">mm 120天累计均值</div></div>
+    <div class="param-card"><div class="val">S1A</div><div class="lbl">数据源</div></div>
+  </div>
+
+  <h2>项目概况</h2>
+  <p>小浪底水电站位于河南省洛阳市与济源市交界处的黄河干流上，是黄河上最大的水利枢纽工程。利用 2025 年春季 3 景 Sentinel-1A 降轨影像，通过 SBAS 时序 InSAR 方法对大坝及库区进行形变监测。</p>
+
+  <div class="img-grid">
+    <div class="img-card">
+      <img src="images/xld_20250112T102914_20250325T102912_S1AA_20250112T102914_20250325T102912_VVP072_INT80_G_weF_6E7E_color_phase.png" alt="01-12→03-25干涉图">
+      <div class="caption">2025-01-12 → 03-25 (72天)</div>
+    </div>
+    <div class="img-card">
+      <img src="images/xld_20250325T102912_20250512T102913_S1AA_20250325T102912_20250512T102913_VVP048_INT80_G_weF_2826_color_phase.png" alt="03-25→05-12干涉图">
+      <div class="caption">2025-03-25 → 05-12 (48天)</div>
+    </div>
+    <div class="img-card">
+      <img src="images/xld_20250112T102914_20250512T102913_S1AA_20250112T102914_20250512T102913_VVP120_INT80_G_weF_08C2_color_phase.png" alt="01-12→05-12干涉图">
+      <div class="caption">2025-01-12 → 05-12 (120天)</div>
+    </div>
+  </div>
+
+  <h2>形变分析结果</h2>
+  <table class="stats-table">
+    <tr><th>干涉对</th><th>基线</th><th>垂直形变范围 (mm)</th><th>均值 (mm)</th><th>标准差 (mm)</th></tr>
+    <tr><td>2025-01-12 → 03-25</td><td>72 天</td><td>-100.0 ~ +62.3</td><td>-5.4</td><td>11.8</td></tr>
+    <tr><td>2025-03-25 → 05-12</td><td>48 天</td><td>-66.9 ~ +132.9</td><td>+19.4</td><td>28.2</td></tr>
+    <tr><td>2025-01-12 → 05-12</td><td>120 天</td><td>-143.6 ~ +53.9</td><td>-21.3</td><td>25.1</td></tr>
+  </table>
+
+  <div class="highlight">
+    <h4>分析结论</h4>
+    <p>坝体及库区在 2025 年 1-5 月期间存在约 -20 mm 的平均沉降趋势。120 天基线干涉图显示最大 -144 mm 的垂向形变。春季为黄河汛前水位调整期，形变信号可能受水位变化和库区沉积物荷载影响。建议增加全年数据获取完整季节性变化规律。</p>
+  </div>
+
+  <h2>技术参数</h2>
+  <table class="stats-table">
+    <tr><th>参数</th><th>值</th></tr>
+    <tr><td>卫星</td><td>Sentinel-1A</td></tr>
+    <tr><td>轨道</td><td>降轨 (~10:29 UTC)</td></tr>
+    <tr><td>影像数</td><td>3 景</td></tr>
+    <tr><td>干涉对</td><td>3 对 (SBAS 完全连接)</td></tr>
+    <tr><td>时间范围</td><td>2025-01-12 ~ 2025-05-12</td></tr>
+    <tr><td>处理方法</td><td>HyP3 INSAR_GAMMA + 垂直形变分析</td></tr>
+    <tr><td>分辨率</td><td>80 m</td></tr>
+    <tr><td>位置</td><td>34.92°N, 112.37°E</td></tr>
+  </table>
+
+  <p style="margin-top:2rem;"><a href="cases.html" class="btn btn-primary">← 返回案例列表</a></p>
+</div></section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><h4>地微科技</h4><p style="font-size:.85rem;line-height:1.6;">专注 InSAR 形变监测技术</p></div>
+    <div><h4>服务</h4><a href="solutions.html">地质灾害监测</a><a href="solutions.html">基础设施安全</a><a href="solutions.html">地震 InSAR</a></div>
+    <div><h4>案例</h4><a href="cases.html">典型案例</a></div>
+    <div><h4>联系</h4><a href="about.html">关于我们</a></div>
+  </div>
+  <div class="footer-bottom">© 2026 地微科技</div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>
