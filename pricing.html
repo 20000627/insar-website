@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>服务与定价 — 地微科技</title>
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+.hero-banner { background:linear-gradient(135deg,#0a3d6b,#00a8cc); color:#fff; padding:4rem 0 3rem; text-align:center; }
+.hero-banner h1 { font-size:2rem; font-weight:700; margin-bottom:.5rem; }
+.hero-banner p { opacity:.85; font-size:1.05rem; max-width:600px; margin:0 auto; }
+
+.price-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; margin:2rem 0; }
+.price-card { background:#fff; border-radius:16px; padding:2rem 1.5rem; box-shadow:0 4px 20px rgba(0,0,0,.06); text-align:center; transition:transform .2s; border:1px solid var(--light-gray); }
+.price-card:hover { transform:translateY(-4px); }
+.price-card.featured { border-color:var(--primary); box-shadow:0 8px 30px rgba(0,168,204,.15); position:relative; }
+.price-card.featured::before { content:'推荐'; position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--primary); color:#fff; font-size:.75rem; padding:.2rem 1rem; border-radius:20px; font-weight:600; }
+.price-card .icon { font-size:2rem; margin-bottom:.5rem; }
+.price-card h3 { font-size:1.15rem; font-weight:600; color:var(--text); }
+.price-card .price { font-size:2rem; font-weight:800; color:var(--primary); margin:.5rem 0; }
+.price-card .price span { font-size:1rem; font-weight:400; color:var(--gray); }
+.price-card .desc { font-size:.85rem; color:var(--gray); line-height:1.5; margin-bottom:1rem; }
+.price-card ul { text-align:left; font-size:.85rem; line-height:1.8; color:var(--gray); padding-left:1rem; }
+.price-card .btn { margin-top:1.2rem; }
+
+.sub-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.5rem; margin:2rem 0; }
+.sub-card { background:#fff; border-radius:12px; padding:1.5rem; box-shadow:0 2px 12px rgba(0,0,0,.06); text-align:center; }
+.sub-card h3 { font-weight:600; }
+.sub-card .price { font-size:1.6rem; font-weight:700; color:var(--primary); margin:.3rem 0; }
+.sub-card .price span { font-size:.85rem; color:var(--gray); font-weight:400; }
+.sub-card .yearly { font-size:.8rem; color:var(--gray); margin-bottom:.5rem; }
+
+.compare-table { width:100%; border-collapse:collapse; margin:2rem 0; font-size:.9rem; }
+.compare-table th { padding:.7rem; background:var(--light-gray); font-weight:600; text-align:center; }
+.compare-table td { padding:.7rem; border-bottom:1px solid var(--light-gray); text-align:center; }
+.compare-table td:first-child { text-align:left; font-weight:500; }
+
+.how-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; margin:2rem 0; }
+.how-step { background:#fff; border-radius:12px; padding:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,.06); text-align:center; }
+.how-step .num { width:36px; height:36px; border-radius:50%; background:var(--primary); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:.9rem; margin-bottom:.5rem; }
+.how-step h4 { font-weight:600; margin-bottom:.3rem; }
+.how-step p { font-size:.82rem; color:var(--gray); line-height:1.4; }
+
+.faq-item { border-bottom:1px solid var(--light-gray); padding:1rem 0; }
+.faq-item h4 { font-weight:600; cursor:pointer; }
+.faq-item p { font-size:.85rem; color:var(--gray); margin-top:.3rem; }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="logo">
+    <svg viewBox="0 0 32 32" fill="none" width="32" height="32"><circle cx="16" cy="16" r="14" stroke="#0a3d6b" stroke-width="2"/><path d="M8 20 L16 8 L24 20" stroke="#00a8cc" stroke-width="2" stroke-linecap="round"/><path d="M12 18 L16 12 L20 18" stroke="#0a3d6b" stroke-width="1.5"/></svg>地微科技
+  </a>
+  <div class="mobile-toggle">☰</div>
+  <ul class="nav-links">
+    <li><a href="index.html">首页</a></li><li><a href="solutions.html">解决方案</a></li>
+    <li><a href="pricing.html" class="active">服务与定价</a></li><li><a href="cases.html">典型案例</a></li><li><a href="about.html">关于我们</a></li>
+  </ul>
+</nav>
+
+<div class="hero-banner">
+  <div class="container">
+    <h1>服务与定价</h1>
+    <p>基于 Sentinel-1 卫星数据，提供快速、可靠的 InSAR 形变监测分析服务</p>
+  </div>
+</div>
+
+<section class="section"><div class="container">
+
+<h2>按次分析</h2>
+<p>适合一次性项目、应急监测、科研实验。提交需求 → 云端处理 → 交付报告。</p>
+
+<div class="price-grid">
+  <div class="price-card">
+    <div class="icon">🌍</div>
+    <h3>D-InSAR 同震</h3>
+    <div class="price">¥199 <span>/次</span></div>
+    <p class="desc">地震应急快速响应，24h 交付同震形变场</p>
+    <ul>
+      <li>震前+震后干涉图</li>
+      <li>LOS / 垂直形变图</li>
+      <li>彩色干涉条纹图</li>
+      <li>PDF 分析报告</li>
+    </ul>
+    <a href="about.html" class="btn btn-primary">开始使用</a>
+  </div>
+
+  <div class="price-card featured">
+    <div class="icon">📊</div>
+    <h3>时序 InSAR Lite</h3>
+    <div class="price">¥499 <span>/次</span></div>
+    <p class="desc">快速形变评估，48h 交付初步分析结果</p>
+    <ul>
+      <li>6-12 景 Sentinel-1</li>
+      <li>基础 SBAS 时序反演</li>
+      <li>累计形变图 + 速率图</li>
+      <li>形变分析报告</li>
+    </ul>
+    <a href="about.html" class="btn btn-primary">开始使用</a>
+  </div>
+
+  <div class="price-card">
+    <div class="icon">🏗️</div>
+    <h3>时序 InSAR Standard</h3>
+    <div class="price">¥1,299 <span>/次</span></div>
+    <p class="desc">完整 SBAS 全流程分析，72h 交付</p>
+    <ul>
+      <li>20-40 景 Sentinel-1</li>
+      <li>完整 SBAS 反演 + 滤波</li>
+      <li>时序形变曲线</li>
+      <li>差异沉降识别与风险评估</li>
+    </ul>
+    <a href="about.html" class="btn btn-primary">开始使用</a>
+  </div>
+
+  <div class="price-card">
+    <div class="icon">🔬</div>
+    <h3>时序 InSAR Pro</h3>
+    <div class="price">¥2,999 <span>/次</span></div>
+    <p class="desc">深度分析，含大气校正与季节性分解</p>
+    <ul>
+      <li>60+ 景 Sentinel-1</li>
+      <li>GACOS 大气校正</li>
+      <li>季节性形变分解</li>
+      <li>论文级数据 + 图表</li>
+    </ul>
+    <a href="about.html" class="btn btn-primary">开始使用</a>
+  </div>
+</div>
+
+<h2 style="margin-top:3rem;">订阅制套餐</h2>
+<p>适合长期监测项目（施工期、运营期安全监测），按月/按季度交付报告。</p>
+
+<div class="sub-grid">
+  <div class="sub-card">
+    <h3>基础版</h3>
+    <div class="price">¥499 <span>/月</span></div>
+    <div class="yearly">年付 ¥4,999 (省¥989)</div>
+    <ul style="text-align:left;font-size:.85rem;color:var(--gray);">
+      <li>1 个监测区域</li>
+      <li>季度形变报告</li>
+      <li>邮件交付</li>
+    </ul>
+    <a href="about.html" class="btn btn-secondary" style="margin-top:.8rem;">了解详情</a>
+  </div>
+  <div class="sub-card">
+    <h3>专业版</h3>
+    <div class="price">¥1,299 <span>/月</span></div>
+    <div class="yearly">年付 ¥12,999 (省¥2,589)</div>
+    <ul style="text-align:left;font-size:.85rem;color:var(--gray);">
+      <li>3 个监测区域</li>
+      <li>月度形变报告</li>
+      <li>形变速率动图</li>
+      <li>异常预警通知</li>
+    </ul>
+    <a href="about.html" class="btn btn-primary" style="margin-top:.8rem;">了解详情</a>
+  </div>
+  <div class="sub-card">
+    <h3>企业版</h3>
+    <div class="price">¥3,999 <span>/月</span></div>
+    <div class="yearly">年付 ¥39,999 (省¥7,989)</div>
+    <ul style="text-align:left;font-size:.85rem;color:var(--gray);">
+      <li>不限监测区域</li>
+      <li>半月报告 + API</li>
+      <li>专属项目经理</li>
+      <li>定制参数设置</li>
+    </ul>
+    <a href="about.html" class="btn btn-secondary" style="margin-top:.8rem;">了解详情</a>
+  </div>
+</div>
+
+<h2 style="margin-top:3rem;">产品对比</h2>
+<table class="compare-table">
+  <tr><th>功能</th><th>D-InSAR</th><th>时序 Lite</th><th>时序 Standard</th><th>时序 Pro</th></tr>
+  <tr><td>数据量</td><td>2 景</td><td>6-12 景</td><td>20-40 景</td><td>60+ 景</td></tr>
+  <tr><td>SBAS 反演</td><td>—</td><td>✅ 基础</td><td>✅ 完整</td><td>✅ 完整</td></tr>
+  <tr><td>大气校正</td><td>—</td><td>—</td><td>—</td><td>✅ GACOS</td></tr>
+  <tr><td>季节性分解</td><td>—</td><td>—</td><td>—</td><td>✅</td></tr>
+  <tr><td>形变速率图</td><td>—</td><td>✅</td><td>✅</td><td>✅</td></tr>
+  <tr><td>时序曲线</td><td>—</td><td>✅</td><td>✅</td><td>✅</td></tr>
+  <tr><td>风险评估</td><td>—</td><td>—</td><td>✅</td><td>✅</td></tr>
+  <tr><td>交付时间</td><td>24h</td><td>48h</td><td>72h</td><td>5 天</td></tr>
+  <tr><td>价格</td><td>¥199</td><td>¥499</td><td>¥1,299</td><td>¥2,999</td></tr>
+</table>
+
+<h2 style="margin-top:3rem;">服务流程</h2>
+<div class="how-grid">
+  <div class="how-step"><div class="num">1</div><h4>提交需求</h4><p>告知监测区域（位置、时间范围、监测目标）</p></div>
+  <div class="how-step"><div class="num">2</div><h4>确认方案</h4><p>我们评估数据可用性并确认分析方案与报价</p></div>
+  <div class="how-step"><div class="num">3</div><h4>云端处理</h4><p>ESA 卫星数据 → ASF HyP3 云处理 → 本地分析</p></div>
+  <div class="how-step"><div class="num">4</div><h4>交付报告</h4><p>在线结果页 + 可下载 PDF，随时查看分享</p></div>
+</div>
+
+<h2 style="margin-top:3rem;">常见问题</h2>
+<div class="faq-item"><h4>InSAR 能达到什么精度？</h4><p>Sentinel-1 InSAR 形变监测精度可达毫米级（亚毫米），取决于数据量、地表覆盖和大气条件。我们的 SBAS 时序分析通常可达 1-3 mm 精度。</p></div>
+<div class="faq-item"><h4>能监测多小的区域？</h4><p>Sentinel-1 分辨率约 20m，最小可监测百米级的形变区域。我们的干涉图处理采用 80m 分辨率，适合单体工程和大范围监测。</p></div>
+<div class="faq-item"><h4>数据更新频率？</h4><p>Sentinel-1 每 12 天对同一区域成像一次。2024年12月后仅 S1A 运行（S1B 已退役），更新频率为 12 天/次。</p></div>
+<div class="faq-item"><h4>支付方式？</h4><p>支持微信支付和支付宝。企业用户支持对公转账和发票开具。</p></div>
+<div class="faq-item"><h4>处理需要多长时间？</h4><p>D-InSAR 约 24h，时序分析 48-72h（取决于数据量）。紧急情况可加急处理。主要耗时在云端排队和下载环节。</p></div>
+
+<div class="text-center" style="margin:3rem 0;">
+  <h3>有疑问或需要定制服务？</h3>
+  <p style="color:var(--gray);">联系我们，获取专属方案和报价</p>
+  <a href="about.html" class="btn btn-primary mt-2">联系 →</a>
+</div>
+
+</div></section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><h4>地微科技</h4><p style="font-size:.85rem;line-height:1.6;">专注 InSAR 形变监测技术，为工程安全与地质灾害防治提供高精度空间信息支撑。</p></div>
+    <div><h4>服务</h4><a href="solutions.html">地质灾害监测</a><a href="solutions.html">基础设施安全</a><a href="pricing.html">服务与定价</a></div>
+    <div><h4>案例</h4><a href="cases.html">典型案例</a></div>
+    <div><h4>联系</h4><a href="about.html">关于我们</a></div>
+  </div>
+  <div class="footer-bottom">© 2026 地微科技</div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>
