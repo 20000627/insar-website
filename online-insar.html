@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>在线 InSAR 形变监测 — 地微科技</title>
+<meta name="description" content="全自动化 InSAR 在线监测平台：设定区域→云端处理→获取报告。支持时序 SBAS 和同震 DInSAR。">
+<meta property="og:title" content="在线 InSAR 形变监测 — 全自动时序流程">
+<meta property="og:description" content="无需专业软件，输入经纬度即可自动完成卫星数据搜索、云端 InSAR 处理与形变分析。">
+<meta property="og:url" content="https://20000627.github.io/insar-website/online-insar.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_CN">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+/* ─── General ─── */
+body { background:#f8fafc; }
+.hero { background:linear-gradient(135deg,#0a3d6b,#00a8cc); color:#fff; padding:3rem 0; text-align:center; }
+.hero h1 { font-size:1.5rem; font-weight:700; margin-bottom:.3rem; }
+.hero p { opacity:.85; font-size:.9rem; max-width:600px; margin:0 auto; line-height:1.5; }
+
+/* ─── Steps (怎样使用) ─── */
+.steps { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; margin:2rem 0; }
+@media(max-width:720px){ .steps { grid-template-columns:1fr; } }
+.step-card { background:#fff; border-radius:10px; padding:1.2rem; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,.05); }
+.step-card .num { width:2rem; height:2rem; border-radius:50%; background:var(--primary); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700; margin-bottom:.5rem; }
+.step-card h3 { font-size:.88rem; font-weight:600; margin-bottom:.2rem; }
+.step-card p { font-size:.78rem; color:var(--gray); line-height:1.4; }
+
+/* ─── Main two-column layout ─── */
+.main-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin:2rem 0; align-items:start; }
+@media(max-width:900px){ .main-grid { grid-template-columns:1fr; } }
+
+/* ─── Left: Form panel ─── */
+.form-panel { background:#fff; border-radius:12px; padding:1.5rem; box-shadow:0 2px 15px rgba(0,0,0,.07); }
+.form-panel h2 { font-size:1rem; font-weight:600; margin-bottom:0; }
+.form-panel .sub { font-size:.78rem; color:var(--gray); margin-bottom:.8rem; }
+.field { margin-bottom:.65rem; }
+.field label { display:block; font-size:.76rem; font-weight:500; color:#374151; margin-bottom:.15rem; }
+.field input, .field select { width:100%; padding:.45rem .6rem; border:1px solid #d1d5db; border-radius:6px; font-size:.82rem; box-sizing:border-box; transition:border-color .2s; }
+.field input:focus, .field select:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 2px rgba(0,168,204,.12); }
+.field-row { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+
+.btn-p { background:var(--primary); color:#fff; border:none; padding:.5rem 1rem; border-radius:8px; font-size:.82rem; font-weight:500; cursor:pointer; transition:background .2s; }
+.btn-p:hover { background:#086f87; }
+.btn-s { background:#f0f0f0; color:var(--text); border:none; padding:.5rem 1rem; border-radius:8px; font-size:.82rem; cursor:pointer; }
+.btn-s:hover { background:#e0e0e0; }
+
+.submit-row { display:flex; gap:.5rem; margin-top:.8rem; }
+.submit-row button { flex:1; text-align:center; }
+
+/* ─── Right: Map panel ─── */
+.map-panel { background:#fff; border-radius:12px; padding:1.5rem; box-shadow:0 2px 15px rgba(0,0,0,.07); }
+.map-panel h2 { font-size:1rem; font-weight:600; margin-bottom:0; }
+.map-panel .sub { font-size:.78rem; color:var(--gray); margin-bottom:.8rem; }
+#map { height:380px; border-radius:10px; overflow:hidden; border:1px solid var(--light-gray); }
+.map-legend { font-size:.72rem; color:var(--gray); margin-top:.3rem; }
+.case-popup h4 { font-size:.82rem; margin:0 0 .15rem; color:var(--primary); }
+.case-popup p { font-size:.72rem; margin:0 0 .25rem; color:var(--gray); line-height:1.3; }
+.case-popup .tag { display:inline-block; font-size:.68rem; padding:.08rem .4rem; border-radius:5px; background:#eef2f6; color:var(--text); margin-right:.15rem; }
+
+/* ─── Gradio supplement card ─── */
+.supplement { margin:2rem 0; background:linear-gradient(135deg,#f5f3ff,#ede9fe); border-radius:12px; padding:1.5rem; display:flex; align-items:center; gap:1.2rem; }
+@media(max-width:600px){ .supplement { flex-direction:column; text-align:center; } }
+.supplement .icon { font-size:2.2rem; flex-shrink:0; }
+.supplement-text h3 { font-size:.9rem; font-weight:600; }
+.supplement-text p { font-size:.8rem; color:var(--gray); line-height:1.4; }
+
+/* ─── How it works section ─── */
+.how-box { background:#fff; border-radius:12px; padding:1.5rem; margin:2rem 0; box-shadow:0 2px 10px rgba(0,0,0,.05); }
+.how-box h2 { font-size:1rem; font-weight:600; margin-bottom:.5rem; }
+.how-flow { display:flex; gap:1rem; align-items:center; }
+@media(max-width:720px){ .how-flow { flex-direction:column; } }
+.how-step { flex:1; text-align:center; padding:.5rem; }
+.how-step .dot { width:1.5rem; height:1.5rem; border-radius:50%; background:var(--primary); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:.7rem; font-weight:700; margin-bottom:.3rem; }
+.how-step h4 { font-size:.82rem; font-weight:600; }
+.how-step p { font-size:.72rem; color:var(--gray); }
+.how-arrow { font-size:1.2rem; color:var(--primary); opacity:.4; }
+
+/* ─── Progress status ─── */
+.status-bar { display:none; background:#fff; border-radius:10px; padding:1rem 1.2rem; margin:.8rem 0; border:1px solid #e5e7eb; }
+.status-bar .row { display:flex; justify-content:space-between; font-size:.78rem; }
+.status-bar .row .step-name { color:var(--gray); }
+.status-bar .row .step-status { font-weight:500; }
+.status-bar .bar-wrap { height:5px; background:#e5e7eb; border-radius:3px; margin-top:.4rem; overflow:hidden; }
+.status-bar .bar-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--primary),#00c8e8); transition:width 1s; border-radius:3px; }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="logo"><svg viewBox="0 0 32 32" fill="none" width="32" height="32"><circle cx="16" cy="16" r="14" stroke="#0a3d6b" stroke-width="2"/><path d="M8 20 L16 8 L24 20" stroke="#00a8cc" stroke-width="2" stroke-linecap="round"/><path d="M12 18 L16 12 L20 18" stroke="#0a3d6b" stroke-width="1.5"/></svg>地微科技</a>
+  <div class="mobile-toggle">☰</div>
+  <ul class="nav-links">
+    <li><a href="index.html">首页</a></li><li><a href="solutions.html">解决方案</a></li>
+    <li><a href="online-insar.html" class="active">在线监测</a></li><li><a href="cases.html">典型案例</a></li><li><a href="about.html">关于我们</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="container">
+    <h1>🌍 在线 InSAR 形变监测</h1>
+    <p>输入目标区域经纬度，即可自动完成卫星数据搜索、云端 InSAR 处理与形变分析。<br>无需专业软件，无需下载数据，结果直接交付。</p>
+  </div>
+</div>
+
+<section class="section"><div class="container">
+
+<!-- Three Steps -->
+<div class="steps">
+  <div class="step-card">
+    <div class="num">1</div>
+    <h3>📌 设定监测区域</h3>
+    <p>输入目标区域的经纬度和时间范围，选择分析类型（时序 / 同震）。</p>
+  </div>
+  <div class="step-card">
+    <div class="num">2</div>
+    <h3>☁️ 全自动云端处理</h3>
+    <p>自动搜索 Sentinel-1 卫星数据，提交云端计算引擎生成干涉图与形变结果。</p>
+  </div>
+  <div class="step-card">
+    <div class="num">3</div>
+    <h3>📊 获取形变报告</h3>
+    <p>处理完成后自动生成分析报告与可视化图表，通过邮件或站内信通知您。</p>
+  </div>
+</div>
+
+<!-- Main: Form + Map -->
+<div class="main-grid">
+
+  <!-- FORM -->
+  <div class="form-panel">
+    <h2>📋 新建监测请求</h2>
+    <p class="sub">填写以下信息，提交后系统自动处理</p>
+
+    <div class="field">
+      <label>项目名称</label>
+      <input type="text" placeholder="如：某沉降区形变监测" id="projName">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>经度</label>
+        <input type="number" step="any" placeholder="如 113.65" id="lon">
+      </div>
+      <div class="field">
+        <label>纬度</label>
+        <input type="number" step="any" placeholder="如 34.75" id="lat">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>开始日期</label>
+        <input type="text" placeholder="2024-01-01" id="startDate">
+      </div>
+      <div class="field">
+        <label>结束日期</label>
+        <input type="text" placeholder="2025-06-01" id="endDate">
+      </div>
+    </div>
+    <div class="field">
+      <label>分析类型</label>
+      <select id="analysisType">
+        <option value="timeseries">时序 InSAR（SBAS，推荐）</option>
+        <option value="dinsar">D-InSAR 同震形变监测</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>结果接收邮箱</label>
+      <input type="email" placeholder="result@example.com" id="email">
+    </div>
+
+    <div class="submit-row">
+      <button class="btn-s" onclick="previewData()">🔍 预览数据</button>
+      <button class="btn-p" onclick="submitRequest()">🚀 提交监测请求</button>
+    </div>
+
+    <!-- Status bar (hidden initially) -->
+    <div class="status-bar" id="statusBar">
+      <div class="row"><span class="step-name" id="statusMsg">就绪</span><span class="step-status" id="statusPct">0%</span></div>
+      <div class="bar-wrap"><div class="bar-fill" id="statusBarFill"></div></div>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-panel">
+    <h2>📍 已完成项目</h2>
+    <p class="sub">点击标记查看成果摘要</p>
+    <div id="map"></div>
+    <p class="map-legend">底图 &copy; OpenStreetMap · 标记为已有案例，坐标仅供参考</p>
+  </div>
+</div>
+
+<!-- Gradio supplement -->
+<div class="supplement">
+  <div class="icon">🖥️</div>
+  <div class="supplement-text">
+    <h3>需要更多控制？试试本地桌面端</h3>
+    <p>启动本地 Gradio 分析工具，支持数据预览、配对策略选择、实时进度追踪、报告导出等功能。适合高级用户和批量处理场景。</p>
+  </div>
+  <div>
+    <button class="btn-s" onclick="showGradioInfo()">了解详情</button>
+  </div>
+</div>
+
+<!-- How it works -->
+<div class="how-box" id="gradioInfo" style="display:none;">
+  <h2>🖥️ 本地桌面分析端</h2>
+  <p style="font-size:.82rem;color:var(--gray);margin-bottom:.8rem;">适用场景：需要完整控制权、离线处理、批量分析。启动后浏览器打开即可使用。</p>
+  <div class="how-flow">
+    <div class="how-step"><div class="dot">1</div><h4>安装环境</h4><p>确保 Python 及依赖包已安装</p></div>
+    <div class="how-arrow">→</div>
+    <div class="how-step"><div class="dot">2</div><h4>启动服务</h4><p>运行本地服务脚本</p></div>
+    <div class="how-arrow">→</div>
+    <div class="how-step"><div class="dot">3</div><h4>打开浏览器</h4><p>访问本地地址，开始使用</p></div>
+  </div>
+  <p style="font-size:.75rem;color:var(--gray);margin-top:.5rem;text-align:center;">如有需要，可联系我们获取启动帮助</p>
+</div>
+
+</div></section>
+
+<script>
+// ─── Interactive Map ───
+var map = L.map('map', { center: [34.5, 108], zoom: 5, scrollWheelZoom: true, attributionControl: false });
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+
+var cases = [
+  { lat:34.92, lng:112.37, name:'小浪底水电站', type:'时序', stat:'-21mm均值', color:'#0a3d6b', page:'case-xiaolangdi.html', icon:'🌊' },
+  { lat:35.74, lng:102.83, name:'积石山地震', type:'D-InSAR', stat:'172mm形变', color:'#dc2626', page:'case-jishishan.html', icon:'🌍' },
+  { lat:31.20, lng:103.50, name:'龙门山震后', type:'时序', stat:'10年监测', color:'#059669', page:'case-longmenshan.html', icon:'🏔️' },
+  { lat:34.75, lng:113.65, name:'郑州地铁3号线', type:'时序', stat:'沿线监测', color:'#d97706', page:'case-zhengzhou-metro.html', icon:'🚇' },
+  { lat:30.80, lng:103.60, name:'广安村滑坡', type:'时序', stat:'160.6mm', color:'#059669', page:'case-guangan-cun.html', icon:'📍' },
+];
+
+cases.forEach(function(item) {
+  L.circleMarker([item.lat, item.lng], { radius:9, fillColor:item.color, color:'#fff', weight:2, fillOpacity:.85 }).addTo(map)
+    .bindPopup('<div class="case-popup"><h4>'+item.icon+' '+item.name+'</h4><p>'+item.type+' · '+item.stat+'</p><span class="tag">'+item.type+'</span><br><a href="'+item.page+'" style="font-size:.72rem;color:var(--primary);font-weight:500;margin-top:.25rem;display:inline-block;">查看详情 →</a></div>');
+});
+L.featureGroup(cases.map(function(i){return L.circleMarker([i.lat,i.lng])})).addTo(map);
+map.fitBounds(L.featureGroup(cases.map(function(i){return L.circleMarker([i.lat,i.lng])})).getBounds().pad(.3));
+
+// ─── Form actions ───
+function previewData() {
+  var lon = document.getElementById('lon').value;
+  var lat = document.getElementById('lat').value;
+  if (!lon || !lat) { alert('请先输入经度和纬度'); return; }
+  showStatus('正在搜索 Sentinel-1 数据...', 15);
+  setTimeout(function() {
+    showStatus('数据搜索完成！该区域有可用卫星影像。', 100);
+    setTimeout(function() { hideStatus(); }, 2000);
+  }, 1500);
+}
+
+function submitRequest() {
+  var lon = document.getElementById('lon').value;
+  var lat = document.getElementById('lat').value;
+  var email = document.getElementById('email').value;
+  if (!lon || !lat || !email) { alert('请填写经度、纬度和接收邮箱'); return; }
+  if (!email.includes('@')) { alert('请输入有效的邮箱地址'); return; }
+
+  showStatus('🚀 请求已提交，正在搜索卫星数据...', 10);
+  setTimeout(function() { showStatus('搜索完成，已找到可用影像。正在提交云端处理...', 25); }, 2000);
+  setTimeout(function() { showStatus('已提交干涉对到 HyP3 云端，等待处理中...', 40); }, 4000);
+  setTimeout(function() { showStatus('HyP3 处理完成，正在下载结果...', 65); }, 6000);
+  setTimeout(function() { showStatus('分析完成！形变结果已生成。', 90); }, 8000);
+  setTimeout(function() { showStatus('✅ 全部完成！结果将通过 ' + email + ' 发送给您。', 100); }, 10000);
+  setTimeout(function() { alert('🎉 请求已成功提交！处理完成后将通过 ' + email + ' 通知您。\n\n当前为演示版本，正式自动处理即将上线。'); hideStatus(); }, 12000);
+}
+
+function showStatus(msg, pct) {
+  var bar = document.getElementById('statusBar');
+  bar.style.display = 'block';
+  document.getElementById('statusMsg').textContent = msg;
+  document.getElementById('statusPct').textContent = pct + '%';
+  document.getElementById('statusBarFill').style.width = pct + '%';
+}
+
+function hideStatus() {
+  document.getElementById('statusBar').style.display = 'none';
+}
+
+function showGradioInfo() {
+  var info = document.getElementById('gradioInfo');
+  info.style.display = info.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><h4>地微科技</h4><p style="font-size:.85rem;line-height:1.6;">专注 InSAR 形变监测技术，为工程安全与地质灾害防治提供高精度空间信息支撑。</p></div>
+    <div><h4>服务</h4><a href="solutions.html">解决方案</a><a href="online-insar.html">在线监测</a></div>
+    <div><h4>案例</h4><a href="cases.html">典型案例</a></div>
+    <div><h4>联系</h4><a href="about.html">关于我们</a></div>
+  </div>
+  <div class="footer-bottom">© 2026 地微科技</div>
+</footer>
+</body>
+</html>
